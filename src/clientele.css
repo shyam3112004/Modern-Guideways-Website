@@ -1,0 +1,245 @@
+/* ==========================================================================
+   MODERN GUIDEWAYS — CLIENTELE SECTION STYLES
+   Restrained White, Navy & Metallic-Blue Visual Language for B2B Showcase
+   ========================================================================== */
+
+.clientele {
+  background: var(--paper);
+  position: relative;
+  z-index: 2;
+  scroll-margin-top: 70px;
+}
+
+.clientele-container {
+  width: 100%;
+}
+
+/* Empty State (Confidential / Updating) */
+.clientele-empty-state {
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 56px 48px;
+  max-width: 680px;
+  box-shadow: 0 4px 20px rgba(7, 26, 49, 0.03);
+  position: relative;
+}
+
+.clientele-empty-state .empty-state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #edf3fc;
+  color: var(--blue);
+  padding: 6px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+
+.clientele-empty-state .empty-title {
+  font-family: var(--sans);
+  font-size: clamp(22px, 2.5vw, 28px);
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  margin: 0 0 12px 0;
+}
+
+.clientele-empty-state .empty-copy {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 28px 0;
+  max-width: 580px;
+}
+
+.clientele-empty-state .empty-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Logo Showcase Grid */
+.clientele-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.client-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 28px 24px 24px 24px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.client-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--blue);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.client-card:hover {
+  transform: translateY(-4px);
+  border-color: #b5c7e4;
+  box-shadow: 0 12px 30px rgba(7, 26, 49, 0.08);
+}
+
+.client-card:hover::after {
+  opacity: 1;
+}
+
+/* Logo Frame */
+.client-logo-frame {
+  height: 75px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(217, 223, 231, 0.6);
+  position: relative;
+}
+
+.client-logo-frame .client-logo {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
+  transition: filter 0.25s ease;
+}
+
+.client-card:hover .client-logo {
+  filter: contrast(1.05);
+}
+
+/* Fallback when logo fails to load or no logo provided */
+.client-logo-fallback {
+  display: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.04em;
+  padding: 8px 12px;
+  background: #f1f4f9;
+  border-left: 3px solid var(--blue);
+  width: 100%;
+}
+
+.client-card.logo-load-error .client-logo {
+  display: none !important;
+}
+
+.client-card.logo-load-error .client-logo-fallback,
+.client-logo-frame.no-logo .client-logo-fallback {
+  display: block;
+}
+
+/* Client Details */
+.client-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.client-name {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  margin: 0 0 8px 0;
+  line-height: 1.35;
+}
+
+.client-description {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 16px 0;
+  flex-grow: 1;
+}
+
+.client-website-link {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.client-website-link svg {
+  transition: transform 0.2s ease;
+}
+
+.client-website-link:hover {
+  color: var(--navy);
+  gap: 8px;
+}
+
+.client-website-link:hover svg {
+  transform: translate(1px, -1px);
+}
+
+.client-website-link:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Responsive layout */
+@media (max-width: 900px) {
+  .clientele-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .clientele-empty-state {
+    padding: 40px 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .clientele-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .client-card {
+    padding: 22px 18px 18px 18px;
+  }
+  .client-logo-frame {
+    height: 65px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+}

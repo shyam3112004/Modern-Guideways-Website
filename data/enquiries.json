@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Karthik Raja",
+    "company": "Sundaram Machine Tools",
+    "phone": "+91 98401 23456",
+    "email": "N/A",
+    "machineType": "CNC Lathe / Turning Center",
+    "protectionType": "Telescopic Steel Covers",
+    "stroke": "X: 800mm, Y: 500mm",
+    "notes": "",
+    "timestamp": "2026-11-07T13:43:26.932Z",
+    "id": "ENQ-1794059006934",
+    "receivedAt": "2026-11-07T13:43:26.934Z"
+  },
+  {
+    "name": "Apex Industrial Machinery",
+    "company": "Apex CNC Ltd",
+    "phone": "+91 94432 12345",
+    "email": "plant@apex.in",
+    "machineType": "HMC (Horizontal Machining Center)",
+    "protectionType": "Telescopic Steel Covers",
+    "stroke": "X: 1600mm, Y: 1200mm, Z: 900mm",
+    "notes": "Need heavy duty stainless steel wipers for high volume coolant runoff.",
+    "id": "ENQ-1794058997209",
+    "receivedAt": "2026-11-07T13:43:17.209Z"
+  }
+]

@@ -1,0 +1,1143 @@
+/* ==========================================================================
+   MODERN GUIDEWAYS — PRODUCTS TAB REDESIGN
+   Editorial Industrial Art Direction + 7 Synchronized Kinematic Streams
+   Final Complete CNC Machine Assembly
+   ========================================================================== */
+
+:root {
+  --mg-navy: #061326;
+  --mg-dark: #091a30;
+  --mg-card: #0b1f3b;
+  --mg-card-subtle: rgba(9, 26, 48, 0.94);
+  --mg-blue: #2469b5;
+  --mg-electric: #56a8ff;
+  --mg-cyan: #3cd4eb;
+  --mg-silver: #c7d0dc;
+  --mg-white: #f5f7fa;
+  --mg-muted: #9aa9bc;
+  --mg-border: rgba(199, 208, 220, 0.14);
+  --mg-border-focus: rgba(86, 168, 255, 0.5);
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+/* ==========================================================================
+   Pinned Stage Container
+   ========================================================================== */
+.products-stage-section {
+  position: relative;
+  height: 350vh;
+  padding: 0;
+  background: var(--mg-navy);
+  color: var(--mg-white);
+  font-family: var(--font-sans);
+  box-sizing: border-box;
+  border-top: 1px solid rgba(36, 105, 181, 0.25);
+  border-bottom: 1px solid rgba(36, 105, 181, 0.25);
+}
+
+.products-stage-pin {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 4vw 16px;
+  box-sizing: border-box;
+}
+
+/* Subtle architectural ambient background */
+.stage-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  background-color: #050b16;
+}
+
+/* Layer 1: Atmospheric Depth & Controlled Metallic-Blue Ambient Light */
+.stage-radial-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110vw;
+  height: 85vh;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(22, 77, 122, 0.26) 0%, rgba(8, 20, 38, 0.6) 45%, rgba(5, 11, 22, 0.98) 100%);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.stage-ambient-light {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 70vw;
+  height: 60vh;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(37, 139, 255, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.stage-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(5, 11, 22, 0.85) 100%);
+  pointer-events: none;
+}
+
+/* Layer 2: Technical Grid Hierarchy */
+/* Secondary Grid Subdivisions: 16px spacing, extremely thin lines, 4-6% opacity */
+.stage-grid-sub {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(16, 38, 61, 0.45) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 38, 61, 0.45) 1px, transparent 1px);
+  background-size: 16px 16px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Primary Grid: 80px spacing, #183451, very low opacity (6-8%) */
+.stage-grid-primary {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(24, 52, 81, 0.75) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(24, 52, 81, 0.75) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Major Coordinate Lines: 400px spacing, slightly brighter coordinate lines (#258BFF @ 9%) */
+.stage-grid-major {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(37, 139, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 139, 255, 0.12) 1px, transparent 1px);
+  background-size: 400px 400px;
+  pointer-events: none;
+}
+
+/* Layer 3: Engineering Detailing & Restrained CAD Drafting Reference */
+.stage-cad-details {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Corner Drafting Registration Brackets */
+.cad-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(37, 139, 255, 0.35);
+  pointer-events: none;
+}
+.cad-tl { top: 18px; left: 18px; border-right: none; border-bottom: none; }
+.cad-tr { top: 18px; right: 18px; border-left: none; border-bottom: none; }
+.cad-bl { bottom: 18px; left: 18px; border-right: none; border-top: none; }
+.cad-br { bottom: 18px; right: 18px; border-left: none; border-top: none; }
+
+/* Top Ruler & Measurement Ticks */
+.cad-ruler-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  border-bottom: 1px solid rgba(24, 52, 81, 0.4);
+}
+.cad-tick {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  height: 4px;
+  background: rgba(37, 139, 255, 0.35);
+}
+.cad-label {
+  position: absolute;
+  bottom: 6px;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: #eaf2ff;
+  opacity: 0.3;
+}
+
+/* Left Ruler & Measurement Ticks */
+.cad-ruler-left {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 32px;
+  border-right: 1px solid rgba(24, 52, 81, 0.4);
+}
+.cad-tick-v {
+  position: absolute;
+  right: 0;
+  height: 1px;
+  width: 4px;
+  background: rgba(37, 139, 255, 0.35);
+}
+.cad-label-v {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: #eaf2ff;
+  opacity: 0.3;
+}
+
+/* Engineering Reference Stamps */
+.cad-stamp-left {
+  position: absolute;
+  bottom: 8px;
+  left: 42px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: #eaf2ff;
+  opacity: 0.35;
+}
+.cad-stamp-right {
+  position: absolute;
+  bottom: 8px;
+  right: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: #eaf2ff;
+  opacity: 0.35;
+}
+.cad-stamp-text {
+  font-weight: 600;
+  color: #258bff;
+}
+.cad-stamp-sub {
+  color: #8ca0ba;
+}
+
+/* Restrained Crosshair Markers at Key Grid Intersections */
+.cad-crosshair {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  transform: translate(-4.5px, -4.5px);
+  pointer-events: none;
+}
+
+.cad-crosshair::before,
+.cad-crosshair::after {
+  content: '';
+  position: absolute;
+  background: rgba(37, 139, 255, 0.45);
+}
+.cad-crosshair::before {
+  top: 4px;
+  left: 0;
+  width: 9px;
+  height: 1px;
+}
+.cad-crosshair::after {
+  top: 0;
+  left: 4px;
+  width: 1px;
+  height: 9px;
+}
+
+/* ==========================================================================
+   Stage Editorial Header
+   ========================================================================== */
+.stage-editorial-header {
+  position: relative;
+  z-index: 25;
+  padding: 16px 4vw 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: linear-gradient(180deg, rgba(6, 19, 38, 0.98) 0%, rgba(6, 19, 38, 0.65) 85%, transparent 100%);
+  transition: opacity 0.3s ease;
+}
+
+.stage-header-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--mg-muted);
+  text-transform: uppercase;
+}
+
+.stage-section-tag {
+  color: var(--mg-electric);
+  font-weight: 500;
+}
+
+.stage-phase-tag {
+  color: var(--mg-silver);
+  background: rgba(36, 105, 181, 0.22);
+  border: 1px solid rgba(86, 168, 255, 0.35);
+  padding: 3px 9px;
+  border-radius: 2px;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+}
+
+.stage-header-main {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.stage-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stage-headline {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--mg-white);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.stage-subheadline {
+  font-family: var(--font-sans);
+  font-size: clamp(12px, 1.0vw, 13.5px);
+  color: var(--mg-muted);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.stage-sync-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  color: var(--mg-silver);
+  padding: 4px 10px;
+  background: rgba(9, 26, 48, 0.75);
+  border: 1px solid var(--mg-border);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.sync-indicator {
+  width: 6px;
+  height: 6px;
+  background: var(--mg-electric);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--mg-electric);
+  animation: pulse-sync 2s infinite ease-in-out;
+}
+
+@keyframes pulse-sync {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px var(--mg-electric); }
+}
+
+/* ==========================================================================
+   Main Viewport & 7-Window Architectural Grid
+   ========================================================================== */
+.stage-main-viewport {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3.5vw;
+  box-sizing: border-box;
+}
+
+.product-windows-grid {
+  position: relative;
+  width: 100%;
+  max-width: 1380px;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  box-sizing: border-box;
+  transition: opacity 0.35s ease;
+  will-change: opacity;
+}
+
+/* Row 1: 4 Products (each span 3 out of 12) */
+.pwindow-0 { grid-column: span 3; }
+.pwindow-1 { grid-column: span 3; }
+.pwindow-2 { grid-column: span 3; }
+.pwindow-3 { grid-column: span 3; }
+
+/* Row 2: 3 Products (each span 4 out of 12, perfectly balanced and flush) */
+.pwindow-4 { grid-column: span 4; }
+.pwindow-5 { grid-column: span 4; }
+.pwindow-6 { grid-column: span 4; }
+
+/* Individual Product Window Card */
+.pwindow {
+  position: relative;
+  background: var(--mg-card-subtle);
+  border: 1px solid var(--mg-border);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(2, 8, 18, 0.5), inset 0 0 16px rgba(36, 105, 181, 0.05);
+  min-height: 270px;
+  will-change: transform, opacity;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pwindow:hover {
+  border-color: var(--mg-border-focus);
+  box-shadow: 0 14px 34px rgba(2, 8, 18, 0.7), inset 0 0 20px rgba(86, 168, 255, 0.12);
+}
+
+.pwindow-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  padding: 0 2px;
+  transition: opacity 0.25s ease;
+}
+
+.pwindow-cat {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  color: var(--mg-electric);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.pwindow-metric {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  color: var(--mg-silver);
+  opacity: 0.85;
+}
+
+.pwindow-title {
+  font-family: var(--font-display);
+  font-size: clamp(12px, 1.1vw, 14.5px);
+  font-weight: 700;
+  color: var(--mg-white);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  transition: opacity 0.25s ease;
+}
+
+/* Window Canvas Area */
+.pwindow-canvas-wrap {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 150px;
+  height: 170px;
+  background: #020712;
+  border: 1px solid rgba(86, 168, 255, 0.12);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pwindow-custom-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #020712;
+  z-index: 4;
+  border-radius: 2px;
+}
+
+video.pwindow-custom-media {
+  object-fit: cover;
+}
+
+.pwindow-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Window Info & Typography */
+.pwindow-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 6px;
+  margin-top: 4px;
+  border-top: 1px solid rgba(199, 208, 220, 0.08);
+  z-index: 5;
+  transition: opacity 0.25s;
+}
+
+.pwindow-desc {
+  font-family: var(--font-sans);
+  font-size: clamp(10px, 0.82vw, 11px);
+  line-height: 1.35;
+  color: var(--mg-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Exploded Alignment Guidelines Layer (Phase 3 & 4)
+   ========================================================================== */
+.assembly-guidelines-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.assembly-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.align-line {
+  stroke: rgba(86, 168, 255, 0.45);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.align-node {
+  fill: var(--mg-electric);
+  r: 3;
+}
+
+/* ==========================================================================
+   Final Complete CNC Machine Stage (Phase 4 & 5)
+   ========================================================================== */
+.final-cnc-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+  will-change: opacity, transform;
+}
+
+.final-cnc-stage.active {
+  pointer-events: auto;
+}
+
+.final-combined-box {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  height: min(620px, calc(100vh - 190px));
+  background: radial-gradient(circle at 50% 30%, rgba(15, 39, 71, 0.95) 0%, rgba(6, 19, 38, 0.98) 100%);
+  border: 1px solid rgba(86, 168, 255, 0.4);
+  border-radius: 6px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(36, 105, 181, 0.25), inset 0 0 30px rgba(86, 168, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.final-combined-box::before, .final-combined-box::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  z-index: 8;
+}
+.final-combined-box::before {
+  top: 8px; left: 8px;
+  border-top: 2px solid var(--mg-electric);
+  border-left: 2px solid var(--mg-electric);
+}
+.final-combined-box::after {
+  bottom: 8px; right: 8px;
+  border-bottom: 2px solid var(--mg-electric);
+  border-right: 2px solid var(--mg-electric);
+}
+
+.final-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 10px;
+  background: rgba(6, 19, 38, 0.75);
+  border-bottom: 1px solid rgba(199, 208, 220, 0.12);
+  z-index: 5;
+}
+
+.final-box-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--mg-electric);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.final-box-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  color: var(--mg-silver);
+  text-transform: uppercase;
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3cd4eb;
+  box-shadow: 0 0 10px #3cd4eb;
+  animation: pulseGlow 1.8s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.final-box-media-wrap {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  background: #020712;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.final-cnc-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  margin: auto;
+  display: block;
+}
+
+.final-media-overlay-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+
+.cnc-lockup-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 24px;
+  background: linear-gradient(180deg, rgba(8, 22, 44, 0.94) 0%, rgba(4, 13, 26, 0.98) 100%);
+  border-top: 1px solid rgba(86, 168, 255, 0.22);
+  backdrop-filter: blur(8px);
+  z-index: 5;
+}
+
+.cnc-lockup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 600px;
+}
+
+.cnc-lockup-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cnc-lockup-tag {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: #38bdf8;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.cnc-lockup-subtag {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.cnc-lockup-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(16px, 1.35vw, 20px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 3px 0 0;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #ffffff 30%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 16px rgba(56, 189, 248, 0.22);
+}
+
+.cnc-lockup-desc {
+  font-family: 'Plus Jakarta Sans', var(--font-sans);
+  font-size: clamp(11.5px, 0.85vw, 12.5px);
+  color: #94a3b8;
+  margin: 2px 0 0;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.cnc-lockup-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cnc-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #1d4ed8 0%, #0f3460 100%);
+  color: #ffffff;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 9px 15px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  text-decoration: none;
+  transition: all 0.22s ease;
+  box-shadow: 0 2px 10px rgba(15, 52, 96, 0.4);
+}
+
+.cnc-btn-primary:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-color: #38bdf8;
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+.cnc-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  color: #cbd5e1;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 9px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+
+.cnc-btn-secondary:hover {
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(30, 58, 138, 0.25);
+  transform: translateY(-1px);
+}
+
+.cnc-editorial-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px 5vw;
+  box-sizing: border-box;
+  background: linear-gradient(to top, rgba(6, 19, 38, 0.7) 0%, rgba(6, 19, 38, 0.2) 25%, transparent 55%);
+}
+
+.cnc-lockup-content {
+  align-self: flex-start;
+  max-width: 580px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: auto;
+}
+
+.cnc-lockup-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cnc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--mg-electric);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 12px rgba(6, 19, 38, 0.8), 0 0 20px rgba(86, 168, 255, 0.35);
+}
+
+.cnc-tag::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mg-cyan);
+  box-shadow: 0 0 8px var(--mg-cyan);
+}
+
+.cnc-brand-heading {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  line-height: 1.05;
+  text-shadow: 0 4px 24px rgba(6, 19, 38, 0.95), 0 0 35px rgba(86, 168, 255, 0.25);
+}
+
+.cnc-brand-subheading {
+  font-family: 'Plus Jakarta Sans', var(--font-sans);
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--mg-silver);
+  text-transform: uppercase;
+  margin: 0 0 12px 0;
+  text-shadow: 0 2px 12px rgba(6, 19, 38, 0.9);
+}
+
+.cnc-types-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.machine-type-chip {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--mg-electric);
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  text-shadow: 0 2px 12px rgba(6, 19, 38, 0.9), 0 0 16px rgba(86, 168, 255, 0.3);
+}
+
+.chip-divider {
+  font-style: normal;
+  color: rgba(199, 208, 220, 0.4);
+  font-size: 11px;
+}
+
+.cnc-pitch-text {
+  font-family: 'Plus Jakarta Sans', var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(220, 230, 242, 0.9);
+  margin: 0 0 20px 0;
+  max-width: 480px;
+  text-shadow: 0 2px 12px rgba(6, 19, 38, 0.9);
+}
+
+.cnc-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.cnc-primary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, var(--mg-blue) 0%, #17488a 100%);
+  border: 1px solid rgba(86, 168, 255, 0.5);
+  padding: 11px 20px;
+  border-radius: 3px;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(36, 105, 181, 0.35);
+  transition: all 0.25s ease;
+}
+
+.cnc-primary-cta:hover {
+  background: linear-gradient(135deg, #2d78cc 0%, var(--mg-blue) 100%);
+  box-shadow: 0 10px 26px rgba(86, 168, 255, 0.4);
+  border-color: var(--mg-electric);
+  transform: translateY(-2px);
+}
+
+.cnc-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mg-silver);
+  background: rgba(9, 26, 48, 0.6);
+  border: 1px solid var(--mg-border);
+  padding: 11px 18px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.cnc-secondary-cta:hover {
+  color: var(--mg-white);
+  border-color: var(--mg-silver);
+  background: rgba(9, 26, 48, 0.9);
+}
+
+/* ==========================================================================
+   Stage Editorial Footer
+   ========================================================================== */
+.stage-editorial-footer {
+  position: relative;
+  z-index: 25;
+  padding: 8px 4vw 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: linear-gradient(0deg, rgba(6, 19, 38, 0.98) 0%, rgba(6, 19, 38, 0.65) 85%, transparent 100%);
+}
+
+.footer-timeline-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  max-width: 720px;
+}
+
+.timeline-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--mg-silver);
+  white-space: nowrap;
+}
+
+.timeline-pct {
+  font-weight: 700;
+  color: var(--mg-electric);
+}
+
+.timeline-track-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(199, 208, 220, 0.12);
+  position: relative;
+  border-radius: 2px;
+}
+
+.timeline-track-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--mg-blue), var(--mg-electric));
+  box-shadow: 0 0 8px var(--mg-electric);
+  border-radius: 2px;
+}
+
+.timeline-step {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 9px;
+  background: rgba(199, 208, 220, 0.25);
+}
+.timeline-step.step-1 { left: 0%; }
+.timeline-step.step-2 { left: 10%; }
+.timeline-step.step-3 { left: 55%; }
+.timeline-step.step-4 { left: 70%; }
+.timeline-step.step-5 { left: 85%; }
+
+.timeline-phase-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--mg-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 1080px) {
+  .product-windows-grid {
+    gap: 10px;
+    height: calc(100vh - 190px);
+  }
+  .pwindow {
+    padding: 6px 8px 8px;
+  }
+  .pwindow-title {
+    font-size: 13px;
+  }
+  .pwindow-desc {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .products-stage-section {
+    height: 480vh;
+  }
+  .stage-editorial-header {
+    padding: 12px 4vw 6px;
+  }
+  .stage-sync-badge { display: none; }
+  .stage-subheadline { display: none; }
+  .product-windows-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 8px;
+    height: calc(100vh - 160px);
+  }
+  .pwindow-0, .pwindow-1, .pwindow-2, .pwindow-3, .pwindow-4, .pwindow-5 {
+    grid-column: span 1;
+  }
+  .pwindow-6 {
+    grid-column: span 2;
+  }
+  .pwindow-desc { display: none; }
+  .cnc-lockup-content {
+    padding: 0;
+  }
+  .cnc-brand-heading {
+    font-size: 24px;
+  }
+  .cnc-pitch-text { display: none; }
+  .timeline-track-bar { max-width: 140px; }
+}
+
+/* ==========================================================================
+   Reduced Motion Accessibility
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .products-stage-section {
+    height: auto;
+  }
+  .products-stage-pin {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+  .product-windows-grid {
+    height: auto;
+    min-height: 600px;
+  }
+  .pwindow {
+  }
+  .final-cnc-stage {
+    position: relative;
+    opacity: 1;
+    pointer-events: auto;
+    min-height: 500px;
+  }
+  .cnc-lockup-content {
+    opacity: 1;
+  }
+  .assembly-guidelines-layer {
+    display: none;
+  }
+}

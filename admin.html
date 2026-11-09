@@ -1,0 +1,2038 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Guideways — Content Management Console</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #071a31;
+      --navy2: #0c2748;
+      --blue: #2e5bba;
+      --electric: #6688ed;
+      --ink: #101b2b;
+      --muted: #647184;
+      --paper: #f3f5f7;
+      --card-bg: #ffffff;
+      --line: #d9dfe7;
+      --success: #15803d;
+      --danger: #b91c1c;
+      --mono: 'DM Mono', monospace;
+      --sans: 'Manrope', Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; }
+
+    /* Admin Top Bar */
+    .admin-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy);
+      color: #fff;
+      padding: 0 4vw;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 30px;
+      background: #14356e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.1em;
+      color: var(--electric);
+      border-radius: 4px;
+    }
+    .brand-titles h1 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+    }
+    .brand-titles span {
+      font-size: 9px;
+      font-family: var(--mono);
+      color: #9cb1cf;
+      letter-spacing: 0.1em;
+    }
+    .admin-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      padding: 9px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 4px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--electric);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.15);
+    }
+    .btn-outline {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .btn-outline:hover {
+      background: #f0f3f6;
+    }
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid rgba(185,28,28,0.3);
+      padding: 6px 12px;
+      font-size: 11px;
+    }
+    .btn-danger:hover {
+      background: rgba(185,28,28,0.08);
+    }
+
+    /* Container & Layout */
+    .admin-container {
+      max-width: 1280px;
+      margin: 32px auto 80px;
+      padding: 0 4vw;
+    }
+    .admin-header-title {
+      margin-bottom: 24px;
+    }
+    .admin-header-title p {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .admin-header-title h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      padding: 12px 24px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: var(--ink);
+    }
+    .tab-btn.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+    }
+
+    /* Tab Content Panels */
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Form Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #edf1f5;
+    }
+    .card-head h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--navy2);
+      margin-bottom: 6px;
+    }
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(46,91,186,0.15);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      margin-top: 10px;
+    }
+    .checkbox-label input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--blue);
+    }
+
+    /* Gallery Thumbnail Preview */
+    .img-preview {
+      width: 120px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+      background: #e2e8f0;
+      margin-top: 8px;
+    }
+
+    /* Media Upload Controls & Preview */
+    .media-upload-group {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+    .media-filemanager-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #ffffff;
+      border: 1px dashed #b9c7d9;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-top: 8px;
+      transition: all 0.2s ease;
+    }
+    .media-filemanager-bar.dragover {
+      border-color: var(--blue);
+      background: #eff6ff;
+    }
+    .media-file-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .media-file-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .media-file-text strong {
+      display: block;
+      font-size: 13px;
+      color: var(--navy);
+    }
+    .media-file-text span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .btn-filemanager {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-filemanager:hover {
+      background: var(--blue);
+    }
+    .media-preview-box {
+      margin-bottom: 10px;
+      background: #091a30;
+      border-radius: 6px;
+      padding: 12px;
+      border: 1px solid rgba(86, 168, 255, 0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .media-preview-box.hidden {
+      display: none !important;
+    }
+    .media-preview-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .media-type-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 2px 8px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      background: #14356e;
+      color: #56a8ff;
+    }
+    .media-type-badge.video {
+      background: #7c2d12;
+      color: #fdba74;
+    }
+    .hidden {
+      display: none !important;
+    }
+
+    /* Clientele Card & Reordering */
+    .client-item-card {
+      position: relative;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 20px;
+    }
+    .client-item-card.dragging {
+      opacity: 0.45;
+      border: 1.5px dashed var(--blue);
+      transform: scale(0.99);
+    }
+    .client-item-card.drag-over {
+      border: 2px solid var(--blue);
+      box-shadow: 0 4px 16px rgba(46, 91, 186, 0.18);
+    }
+    .drag-handle {
+      cursor: grab;
+      padding: 4px 6px;
+      border-radius: 3px;
+    }
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+    .drag-handle:hover {
+      background: #e2e8f0;
+      color: var(--navy);
+    }
+    .upload-error-msg {
+      background: #fdf2f2;
+      border: 1px solid #f98080;
+      color: #9b1c1c;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-top: 8px;
+      font-family: var(--mono);
+    }
+    .upload-error-msg.hidden {
+      display: none !important;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 6px;
+      border-left: 4px solid var(--success);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Add item button */
+    .add-btn-box {
+      text-align: center;
+      margin-top: 16px;
+      padding: 16px;
+      border: 2px dashed var(--line);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.4);
+    }
+
+    /* Authentication Barrier Screen */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: radial-gradient(circle at 50% 30%, #0d223f 0%, #061326 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .auth-box {
+      width: 100%;
+      max-width: 440px;
+      background: #091a30;
+      border: 1px solid rgba(86, 168, 255, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 24px 60px rgba(2, 8, 18, 0.8), 0 0 30px rgba(36, 105, 181, 0.2);
+      padding: 36px 32px;
+      color: #fff;
+    }
+    .auth-brand-lockup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-logo {
+      width: 48px;
+      height: 42px;
+      background: #14356e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.05em;
+      color: #56a8ff;
+      border-radius: 6px;
+      margin-bottom: 14px;
+      box-shadow: 0 0 16px rgba(86, 168, 255, 0.3);
+    }
+    .auth-brand-lockup h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .auth-brand-lockup span {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: #9cb1cf;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .auth-input-group {
+      margin-bottom: 18px;
+    }
+    .auth-input-group label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #9cb1cf;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .auth-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .auth-input {
+      width: 100%;
+      background: #061326;
+      border: 1px solid rgba(86, 168, 255, 0.25);
+      border-radius: 4px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .auth-input:focus {
+      border-color: #56a8ff;
+      box-shadow: 0 0 12px rgba(86, 168, 255, 0.25);
+    }
+    .auth-toggle-btn {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      color: #9cb1cf;
+      font-size: 13px;
+      padding: 4px;
+    }
+    .auth-toggle-btn:hover {
+      color: #fff;
+    }
+    .auth-error-msg {
+      background: rgba(185, 28, 28, 0.25);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #fca5a5;
+      font-size: 12px;
+      padding: 10px 14px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .auth-remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #9cb1cf;
+      margin-bottom: 22px;
+      cursor: pointer;
+    }
+    .auth-remember input {
+      accent-color: #2e5bba;
+    }
+    .auth-submit-btn {
+      width: 100%;
+      padding: 13px;
+      background: #2e5bba;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      border-radius: 4px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(46, 91, 186, 0.4);
+    }
+    .auth-submit-btn:hover {
+      background: #3b6cd9;
+      transform: translateY(-1px);
+    }
+    .auth-card-footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #647184;
+    }
+    .auth-card-footer a {
+      color: #9cb1cf;
+      transition: color 0.2s;
+    }
+    .auth-card-footer a:hover {
+      color: #56a8ff;
+    }
+  </style>
+</head>
+<body>
+  <!-- OWNER AUTHENTICATION GATE -->
+  <div id="auth-gate" class="auth-overlay">
+    <div class="auth-box">
+      <div class="auth-brand-lockup">
+        <div class="auth-logo">MG</div>
+        <h1>MODERN GUIDEWAYS</h1>
+        <span>ADMINISTRATIVE CONSOLE</span>
+      </div>
+      <p style="text-align:center;font-size:12px;color:#9cb1cf;margin-bottom:20px;line-height:1.5;">
+        Restricted access for Modern Guideways facility administrators. Enter your registered email and password to access the content console and customer enquiries.
+      </p>
+      <div id="login-error" class="auth-error-msg" style="display:none;"></div>
+      <form id="admin-login-form">
+        <div class="auth-input-group">
+          <label for="admin-email">Administrator Email</label>
+          <div class="auth-input-wrap">
+            <input type="email" id="admin-email" class="auth-input" placeholder="modernguideways@gmail.com" required autocomplete="username" />
+          </div>
+        </div>
+        <div class="auth-input-group">
+          <label for="admin-password">Password</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="admin-password" class="auth-input" placeholder="••••••••••••" required autocomplete="current-password" />
+            <button type="button" id="toggle-pw" class="auth-toggle-btn" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+        <label class="auth-remember">
+          <input type="checkbox" id="remember-me" checked />
+          <span>Keep me signed in on this computer</span>
+        </label>
+        <button type="submit" id="login-submit-btn" class="auth-submit-btn">Unlock Console ↗</button>
+      </form>
+      <div class="auth-card-footer">
+        <span>Engineering Desk · Dharmapuri</span>
+        <a href="/">← Return to Main Website</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-app" style="display:none;">
+    <header class="admin-bar">
+      <div class="admin-brand">
+        <div class="brand-mark">MG</div>
+        <div class="brand-titles">
+          <h1>MODERN GUIDEWAYS</h1>
+          <span>ADMIN MANAGEMENT CONSOLE</span>
+        </div>
+      </div>
+      <div class="admin-actions">
+        <a href="/" target="_blank" class="btn btn-secondary">View Live Site ↗</a>
+        <button type="button" id="reset-btn" class="btn btn-secondary">Reset Defaults</button>
+        <button type="button" id="save-btn" class="btn btn-primary">Save Changes</button>
+        <button type="button" id="logout-btn" class="btn btn-danger" style="background:#7f1d1d;color:#fff;border:none;">Sign Out ⎋</button>
+      </div>
+    </header>
+
+  <main class="admin-container">
+    <div class="admin-header-title">
+      <p>WEBSITE ARCHITECTURE & CONTENT</p>
+      <h2>Manage Live Sections</h2>
+    </div>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="products">01 Products</button>
+      <button class="tab-btn" data-tab="capabilities">02 Capabilities</button>
+      <button class="tab-btn" data-tab="gallery">03 Visual Story (Gallery)</button>
+      <button class="tab-btn" data-tab="clientele">04 Clientele</button>
+      <button class="tab-btn" data-tab="contact">05 Contact Details</button>
+      <button class="tab-btn" data-tab="enquiries">06 Customer Leads & Enquiries</button>
+    </nav>
+
+    <!-- TAB 1: PRODUCTS -->
+    <section class="tab-panel active" id="tab-products">
+      <div id="products-list"></div>
+      <div class="add-btn-box">
+        <button type="button" id="add-product-btn" class="btn btn-outline">+ Add New Product Card</button>
+      </div>
+
+      <!-- SEPARATE FINAL CLIMAX VIDEO / IMAGE SHOWCASE SECTION -->
+      <div class="card" id="final-showcase-card" style="margin-top: 36px; border: 1.5px solid #2469b1; background: #ffffff; box-shadow: 0 4px 20px rgba(36, 105, 181, 0.08);">
+        <div class="card-head" style="border-bottom: 2px solid #2469b1; padding-bottom: 12px; margin-bottom: 18px;">
+          <div>
+            <span style="font-family:var(--mono);font-size:11px;color:#2469b1;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">CLIMAX SHOWCASE · FINAL SCROLL CONVERGENCE</span>
+            <h3 style="margin:4px 0 0 0;font-size:18px;color:#0b192c;">Final Combined Box Media (Video or Image)</h3>
+            <p style="margin:4px 0 0 0;font-size:12px;color:#556987;">Upload the hero video or photo displayed when all 7 product boxes combine into a single master box at the end of scroll animation.</p>
+          </div>
+          <span class="badge" style="background:#2469b1;color:#fff;font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:12px;">STAGE 08 / MASTER</span>
+        </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex:2;">
+              <label>Master Climax Title</label>
+              <input type="text" id="final-showcase-title" placeholder="e.g. Unified CNC Center" />
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Badge / Tagline</label>
+              <input type="text" id="final-showcase-badge" placeholder="e.g. CONVERGENCE" />
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Master Metric</label>
+              <input type="text" id="final-showcase-metric" placeholder="e.g. 5-AXIS DATUM" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Climax Description</label>
+            <textarea id="final-showcase-desc" placeholder="7 precision systems unified in motion."></textarea>
+          </div>
+
+        <div class="form-group media-upload-group">
+          <label style="font-weight:700;color:var(--navy);font-size:12px;">Final Climax Video or Image (Uploaded from Computer)</label>
+          <div class="media-upload-container">
+            <div class="media-preview-box hidden" id="final-media-preview"></div>
+            <div class="media-filemanager-bar" id="final-media-bar">
+              <div class="media-file-info">
+                <span class="media-file-icon" id="final-media-icon">🎥</span>
+                <div class="media-file-text">
+                  <strong id="final-media-filename">No file selected from computer</strong>
+                  <span id="final-media-status">Upload final MP4/WebM video or high-res JPG/PNG</span>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <input type="file" id="final-media-file-input" accept="image/*,video/*" style="display:none;" />
+                <button type="button" class="btn-filemanager" id="browse-final-media-btn">
+                  <span>📂</span> Choose File from Computer
+                </button>
+                <button type="button" class="btn btn-outline hidden" id="clear-final-media-btn">Remove</button>
+              </div>
+            </div>
+            <!-- Internal hidden stores -->
+            <input type="hidden" id="final-media-url" value="" />
+            <input type="hidden" id="final-media-type" value="" />
+            <input type="hidden" id="final-media-filename-input" value="" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CAPABILITIES -->
+    <section class="tab-panel" id="tab-capabilities">
+      <div class="card">
+        <div class="card-head">
+          <h3>Capabilities Intro</h3>
+        </div>
+        <div class="form-group">
+          <label>Headline (HTML permitted, e.g. Made for the&lt;br&gt;&lt;em&gt;real world.&lt;/em&gt;)</label>
+          <input type="text" id="cap-headline" />
+        </div>
+        <div class="form-group">
+          <label>Lead Paragraph</label>
+          <textarea id="cap-lead"></textarea>
+        </div>
+      </div>
+      <div id="capabilities-steps-list"></div>
+      <div class="add-btn-box">
+        <button type="button" id="add-step-btn" class="btn btn-outline">+ Add Process Step</button>
+      </div>
+    </section>
+
+    <!-- TAB 3: GALLERY -->
+    <section class="tab-panel" id="tab-gallery">
+      <div id="gallery-list"></div>
+      <div class="add-btn-box">
+        <button type="button" id="add-gallery-btn" class="btn btn-outline">+ Add Gallery Image</button>
+      </div>
+    </section>
+
+    <!-- TAB 4: CLIENTELE MANAGEMENT -->
+    <section class="tab-panel" id="tab-clientele">
+      <div class="card" style="margin-bottom:20px;border-left:4px solid var(--blue);">
+        <div class="card-head">
+          <div>
+            <h3 style="margin:0 0 4px 0;">Clientele Management</h3>
+            <p style="margin:0;font-size:12px;color:var(--muted);">Manage client company logos, descriptions, official URLs, visibility toggles and display ordering.</p>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <span class="badge" id="clientele-count-badge" style="background:#eaf0fa;color:var(--blue);font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:2px;font-weight:600;">0 Clients</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="clientele-list" style="display:flex;flex-direction:column;gap:18px;"></div>
+
+      <div class="add-btn-box" style="margin-top:20px;">
+        <button type="button" id="add-client-btn" class="btn btn-outline" style="width:100%;padding:14px;font-weight:700;">+ Add New Client Company</button>
+      </div>
+    </section>
+
+    <!-- TAB 5: CONTACT DETAILS -->
+    <section class="tab-panel" id="tab-contact">
+      <div class="card">
+        <div class="card-head">
+          <h3>Company Direct Channels</h3>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Primary Phone</label>
+            <input type="text" id="contact-phone1" />
+          </div>
+          <div class="form-group">
+            <label>Secondary Phone</label>
+            <input type="text" id="contact-phone2" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Official Inquiries Email</label>
+          <input type="email" id="contact-email" />
+        </div>
+        <div class="form-group">
+          <label>Physical Address (Dharmapuri Facility)</label>
+          <textarea id="contact-address"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>WhatsApp Number (Country code + 10 digits, e.g. 918056438763)</label>
+            <input type="text" id="contact-whatsapp" />
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Greeting Message</label>
+            <input type="text" id="contact-whatsapp-msg" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Google Maps Directions Link</label>
+          <input type="url" id="contact-map" />
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: ENQUIRIES & LEADS -->
+    <section class="tab-panel" id="tab-enquiries">
+      <div class="card" id="enquiries-card">
+        <div class="card-head">
+          <h3>Customer Technical Enquiries</h3>
+          <button type="button" class="btn btn-outline" id="refresh-enquiries-btn" style="padding:6px 14px;font-size:11px;">Refresh Leads</button>
+        </div>
+        <p style="color:var(--muted);font-size:12px;margin-bottom:16px;">Incoming quote requests and technical machine specifications submitted via the website contact desk.</p>
+        <div id="enquiries-list" style="display:flex;flex-direction:column;gap:12px;">
+          <p style="color:var(--muted);font-size:13px;font-style:italic;">Loading enquiries...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">
+    <span>✓</span> Changes saved successfully! Live site updated.
+  </div>
+  </div> <!-- /admin-app -->
+
+  <script type="module">
+    import { loadContent, saveContent, resetContent, syncContentFromBackend } from '/src/content-manager.js';
+
+    let currentData = loadContent();
+
+    // Tab Switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (msg) t.innerHTML = `<span>✓</span> ${msg}`;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function renderMediaPreviewHtml(url, type) {
+      if (!url) return '';
+      const isVideo = type === 'video' || /\.(mp4|webm|mov|ogg)($|\?)/i.test(url) || /^data:video\//i.test(url);
+      return `
+        <div class="media-preview-header">
+          <span class="media-type-badge ${isVideo ? 'video' : 'image'}">${isVideo ? '🎥 VIDEO ASSET' : '🖼️ IMAGE ASSET'}</span>
+          <span style="font-family:var(--mono);font-size:10px;color:#9cb1cf;">ACTIVE DISPLAY PREVIEW</span>
+        </div>
+        ${isVideo
+          ? `<video src="${url}" controls preload="metadata" style="max-height:180px;max-width:100%;border-radius:4px;background:#000;display:block;box-shadow:0 2px 8px rgba(0,0,0,0.5);"></video>`
+          : `<img src="${url}" alt="Product media preview" style="max-height:180px;max-width:100%;object-fit:contain;border-radius:4px;display:block;box-shadow:0 2px 8px rgba(0,0,0,0.5);">`
+        }
+      `;
+    }
+
+    function handleMediaFile(file, idx) {
+      if (!file) return;
+      const isVideo = file.type.startsWith('video');
+      const previewBox = document.getElementById(`media-preview-${idx}`);
+      const urlInput = document.getElementById(`media-url-${idx}`);
+      const typeInput = document.getElementById(`media-type-${idx}`);
+      const fileNameInput = document.getElementById(`media-filename-input-${idx}`);
+      const fileNameEl = document.getElementById(`media-filename-${idx}`);
+      const statusEl = document.getElementById(`media-status-${idx}`);
+      const clearBtn = document.getElementById(`clear-media-${idx}`);
+
+      if (isVideo && file.size > 25 * 1024 * 1024) {
+        if (!confirm('This video exceeds 25MB. For optimal website loading speed and browser storage limits, we recommend smaller clips. Continue uploading?')) {
+          return;
+        }
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        const mediaType = isVideo ? 'video' : 'image';
+        if (urlInput) urlInput.value = dataUrl;
+        if (typeInput) typeInput.value = mediaType;
+        if (fileNameInput) fileNameInput.value = file.name;
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        if (statusEl) statusEl.textContent = `${mediaType.toUpperCase()} selected (${(file.size / 1024).toFixed(0)} KB) · Click Save Changes to publish`;
+        if (previewBox) {
+          previewBox.innerHTML = renderMediaPreviewHtml(dataUrl, mediaType, file.name);
+          previewBox.classList.remove('hidden');
+        }
+        if (clearBtn) clearBtn.classList.remove('hidden');
+        collectFormData();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleFinalMediaFile(file) {
+      if (!file) return;
+      const isVideo = file.type.startsWith('video');
+      const previewBox = document.getElementById('final-media-preview');
+      const urlInput = document.getElementById('final-media-url');
+      const typeInput = document.getElementById('final-media-type');
+      const fileNameInput = document.getElementById('final-media-filename-input');
+      const fileNameEl = document.getElementById('final-media-filename');
+      const statusEl = document.getElementById('final-media-status');
+      const clearBtn = document.getElementById('clear-final-media-btn');
+      const iconEl = document.getElementById('final-media-icon');
+
+      if (isVideo && file.size > 30 * 1024 * 1024) {
+        if (!confirm('This video exceeds 30MB. For optimal website loading speed and browser storage limits, we recommend smaller clips. Continue uploading?')) {
+          return;
+        }
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        const mediaType = isVideo ? 'video' : 'image';
+        if (urlInput) urlInput.value = dataUrl;
+        if (typeInput) typeInput.value = mediaType;
+        if (fileNameInput) fileNameInput.value = file.name;
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        if (statusEl) statusEl.textContent = `${mediaType.toUpperCase()} selected (${(file.size / 1024).toFixed(0)} KB) · Click Save Changes to publish`;
+        if (iconEl) iconEl.textContent = isVideo ? '🎥' : '📁';
+        if (previewBox) {
+          previewBox.innerHTML = renderMediaPreviewHtml(dataUrl, mediaType, file.name);
+          previewBox.classList.remove('hidden');
+        }
+        if (clearBtn) clearBtn.classList.remove('hidden');
+        collectFormData();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Render Products Form
+    function renderProductsForm() {
+      const list = document.getElementById('products-list');
+      list.innerHTML = currentData.products.map((p, index) => `
+        <div class="card" data-index="${index}">
+          <div class="card-head">
+            <h3>Product #${index + 1}: ${p.title}</h3>
+            <button type="button" class="btn btn-danger delete-prod" data-index="${index}">Remove</button>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex:2;">
+              <label>Product Title</label>
+              <input type="text" class="prod-title" value="${p.title}" />
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Category / Badge</label>
+              <input type="text" class="prod-label" value="${p.label || ''}" />
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Engineering Metric</label>
+              <input type="text" class="prod-metric" value="${p.metric || ''}" placeholder="e.g. STROKE 2400mm" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea class="prod-desc">${p.description}</textarea>
+          </div>
+          <div class="form-group media-upload-group">
+            <label style="font-weight:700;color:var(--navy);font-size:12px;">Product Photo / Video (Uploaded from Computer)</label>
+            <div class="media-upload-container">
+              <div class="media-preview-box ${p.mediaUrl ? '' : 'hidden'}" id="media-preview-${index}">
+                ${renderMediaPreviewHtml(p.mediaUrl, p.mediaType, p.mediaFileName)}
+              </div>
+              <div class="media-filemanager-bar" data-index="${index}">
+                <div class="media-file-info">
+                  <span class="media-file-icon">${p.mediaType === 'video' ? '🎥' : '📁'}</span>
+                  <div class="media-file-text">
+                    <strong id="media-filename-${index}">${p.mediaFileName || (p.mediaUrl ? 'Saved Media File' : 'No file selected from computer')}</strong>
+                    <span id="media-status-${index}">${p.mediaUrl ? 'Active on product display' : 'Access your computer file manager to upload'}</span>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <input type="file" class="prod-media-file" id="file-input-${index}" accept="image/*,video/*" style="display:none;" data-index="${index}" />
+                  <button type="button" class="btn-filemanager browse-media-btn" data-index="${index}">
+                    <span>📂</span> Choose File from Computer
+                  </button>
+                  <button type="button" class="btn btn-outline clear-media-btn ${p.mediaUrl ? '' : 'hidden'}" id="clear-media-${index}" data-index="${index}">Remove</button>
+                </div>
+              </div>
+              <!-- Internal data store (No manual URL/path inputs) -->
+              <input type="hidden" class="prod-media-url" id="media-url-${index}" value="${p.mediaUrl || ''}" />
+              <input type="hidden" class="prod-media-type" id="media-type-${index}" value="${p.mediaType || ''}" />
+              <input type="hidden" class="prod-media-filename" id="media-filename-input-${index}" value="${p.mediaFileName || ''}" />
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.delete-prod').forEach(b => {
+        b.addEventListener('click', () => {
+          collectFormData();
+          const idx = parseInt(b.dataset.index, 10);
+          currentData.products.splice(idx, 1);
+          renderProductsForm();
+        });
+      });
+
+      // Attach File Manager Browse button events
+      list.querySelectorAll('.browse-media-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.dataset.index;
+          const fileInput = document.getElementById(`file-input-${idx}`);
+          fileInput?.click();
+        });
+      });
+
+      // Attach native input file change events
+      list.querySelectorAll('.prod-media-file').forEach(fileInput => {
+        fileInput.addEventListener('change', (e) => {
+          const idx = fileInput.dataset.index;
+          if (e.target.files && e.target.files[0]) {
+            handleMediaFile(e.target.files[0], idx);
+          }
+        });
+      });
+
+      // Attach Drag & Drop support to media bar
+      list.querySelectorAll('.media-filemanager-bar').forEach(bar => {
+        const idx = bar.dataset.index;
+        bar.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          bar.classList.add('dragover');
+        });
+        bar.addEventListener('dragleave', () => {
+          bar.classList.remove('dragover');
+        });
+        bar.addEventListener('drop', (e) => {
+          e.preventDefault();
+          bar.classList.remove('dragover');
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleMediaFile(e.dataTransfer.files[0], idx);
+          }
+        });
+      });
+
+      // Attach Clear Media events
+      list.querySelectorAll('.clear-media-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.dataset.index;
+          const urlInput = document.getElementById(`media-url-${idx}`);
+          const typeInput = document.getElementById(`media-type-${idx}`);
+          const fileNameInput = document.getElementById(`media-filename-input-${idx}`);
+          const fileInput = document.getElementById(`file-input-${idx}`);
+          const previewBox = document.getElementById(`media-preview-${idx}`);
+          const fileNameEl = document.getElementById(`media-filename-${idx}`);
+          const statusEl = document.getElementById(`media-status-${idx}`);
+
+          if (urlInput) urlInput.value = '';
+          if (typeInput) typeInput.value = '';
+          if (fileNameInput) fileNameInput.value = '';
+          if (fileInput) fileInput.value = '';
+          if (fileNameEl) fileNameEl.textContent = 'No file selected from computer';
+          if (statusEl) statusEl.textContent = 'Access your computer file manager to upload';
+          if (previewBox) {
+            previewBox.innerHTML = '';
+            previewBox.classList.add('hidden');
+          }
+          btn.classList.add('hidden');
+          collectFormData();
+        });
+      });
+
+      // --- Render Final Showcase Section (Climax Media) ---
+      const fs = currentData.finalShowcase || {};
+      const fsTitleInput = document.getElementById('final-showcase-title');
+      const fsBadgeInput = document.getElementById('final-showcase-badge');
+      const fsMetricInput = document.getElementById('final-showcase-metric');
+      const fsDescInput = document.getElementById('final-showcase-desc');
+      const fsUrlInput = document.getElementById('final-media-url');
+      const fsTypeInput = document.getElementById('final-media-type');
+      const fsFnInput = document.getElementById('final-media-filename-input');
+      const fsPreviewBox = document.getElementById('final-media-preview');
+      const fsFnEl = document.getElementById('final-media-filename');
+      const fsStatusEl = document.getElementById('final-media-status');
+      const fsClearBtn = document.getElementById('clear-final-media-btn');
+      const fsIconEl = document.getElementById('final-media-icon');
+
+      if (fsTitleInput) fsTitleInput.value = fs.title || 'Unified CNC Center';
+      if (fsBadgeInput) fsBadgeInput.value = fs.badge || 'CONVERGENCE';
+      if (fsMetricInput) fsMetricInput.value = fs.metric || '5-AXIS DATUM';
+      if (fsDescInput) fsDescInput.value = fs.description || '7 precision systems unified in motion.';
+      if (fsUrlInput) fsUrlInput.value = fs.mediaUrl || '';
+      if (fsTypeInput) fsTypeInput.value = fs.mediaType || '';
+      if (fsFnInput) fsFnInput.value = fs.mediaFileName || '';
+
+      if (fsPreviewBox) {
+        if (fs.mediaUrl) {
+          fsPreviewBox.innerHTML = renderMediaPreviewHtml(fs.mediaUrl, fs.mediaType, fs.mediaFileName);
+          fsPreviewBox.classList.remove('hidden');
+          if (fsFnEl) fsFnEl.textContent = fs.mediaFileName || 'Saved Climax Media';
+          if (fsStatusEl) fsStatusEl.textContent = 'Active on final combined box display';
+          if (fsClearBtn) fsClearBtn.classList.remove('hidden');
+          if (fsIconEl) fsIconEl.textContent = fs.mediaType === 'video' ? '🎥' : '📁';
+        } else {
+          fsPreviewBox.innerHTML = '';
+          fsPreviewBox.classList.add('hidden');
+          if (fsFnEl) fsFnEl.textContent = 'No file selected from computer';
+          if (fsStatusEl) fsStatusEl.textContent = 'Upload final MP4/WebM video or high-res JPG/PNG';
+          if (fsClearBtn) fsClearBtn.classList.add('hidden');
+          if (fsIconEl) fsIconEl.textContent = '🎥';
+        }
+      }
+    }
+
+    // Render Capabilities Form
+    function renderCapabilitiesForm() {
+      document.getElementById('cap-headline').value = currentData.capabilities.headline || '';
+      document.getElementById('cap-lead').value = currentData.capabilities.lead || '';
+
+      const list = document.getElementById('capabilities-steps-list');
+      list.innerHTML = currentData.capabilities.steps.map((s, index) => `
+        <div class="card" data-step-index="${index}">
+          <div class="card-head">
+            <h3>Step ${s.num}</h3>
+            <button type="button" class="btn btn-danger delete-step" data-index="${index}">Remove</button>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Step Number</label>
+              <input type="text" class="step-num" value="${s.num}" />
+            </div>
+            <div class="form-group">
+              <label>Step Title</label>
+              <input type="text" class="step-title" value="${s.title}" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Detail Description</label>
+            <textarea class="step-detail">${s.detail}</textarea>
+          </div>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.delete-step').forEach(b => {
+        b.addEventListener('click', () => {
+          collectFormData();
+          const idx = parseInt(b.dataset.index, 10);
+          currentData.capabilities.steps.splice(idx, 1);
+          renderCapabilitiesForm();
+        });
+      });
+    }
+
+    // Render Gallery Form
+    function renderGalleryForm() {
+      const list = document.getElementById('gallery-list');
+      list.innerHTML = currentData.gallery.map((g, index) => `
+        <div class="card" data-gal-index="${index}">
+          <div class="card-head">
+            <h3>Visual Story Card #${index + 1}: ${g.title}</h3>
+            <button type="button" class="btn btn-danger delete-gal" data-index="${index}">Remove</button>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" class="gal-title" value="${g.title}" />
+            </div>
+            <div class="form-group">
+              <label>Index Label (e.g. 01)</label>
+              <input type="text" class="gal-num" value="${g.num}" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Frame / Image Path</label>
+              <input type="text" class="gal-img" value="${g.image}" />
+              <img src="${g.image}" class="img-preview" alt="Preview" />
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" class="gal-large" ${g.large ? 'checked' : ''} />
+                Featured Large Showcase Image
+              </label>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.delete-gal').forEach(b => {
+        b.addEventListener('click', () => {
+          collectFormData();
+          const idx = parseInt(b.dataset.index, 10);
+          currentData.gallery.splice(idx, 1);
+          renderGalleryForm();
+        });
+      });
+    }
+
+    // Render Contact Form
+    function renderContactForm() {
+      document.getElementById('contact-phone1').value = currentData.contact.phone1 || '';
+      document.getElementById('contact-phone2').value = currentData.contact.phone2 || '';
+      document.getElementById('contact-email').value = currentData.contact.email || '';
+      document.getElementById('contact-address').value = currentData.contact.address || '';
+      document.getElementById('contact-whatsapp').value = currentData.contact.whatsapp || '';
+      document.getElementById('contact-whatsapp-msg').value = currentData.contact.whatsappMessage || '';
+      document.getElementById('contact-map').value = currentData.contact.mapUrl || '';
+    }
+
+    function escapeAdmin(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function showClientError(idx, msg) {
+      const el = document.getElementById(`client-error-${idx}`);
+      if (el) {
+        el.textContent = msg;
+        el.classList.remove('hidden');
+      }
+    }
+
+    function hideClientError(idx) {
+      const el = document.getElementById(`client-error-${idx}`);
+      if (el) {
+        el.textContent = '';
+        el.classList.add('hidden');
+      }
+    }
+
+    async function handleClientLogoFile(file, idx) {
+      if (!file) return;
+
+      const allowedExts = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml'];
+      const ext = '.' + file.name.split('.').pop().toLowerCase();
+
+      if (!allowedTypes.includes(file.type) && !allowedExts.includes(ext)) {
+        showClientError(idx, `Unsupported file format (${ext || file.type}). Please select a PNG, JPG, JPEG, WebP, or SVG logo.`);
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        showClientError(idx, `Logo file exceeds 5MB size limit (${(file.size / (1024 * 1024)).toFixed(1)}MB). Please choose a smaller logo.`);
+        return;
+      }
+
+      hideClientError(idx);
+
+      const urlInput = document.getElementById(`client-logo-${idx}`);
+      const fnInput = document.getElementById(`client-logofilename-${idx}`);
+      const previewBox = document.getElementById(`client-preview-${idx}`);
+      const fnEl = document.getElementById(`client-filename-${idx}`);
+      const statusEl = document.getElementById(`client-status-${idx}`);
+      const clearBtn = document.getElementById(`clear-client-logo-${idx}`);
+
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const dataUrl = e.target.result;
+
+        // Immediate visual preview before saving
+        if (urlInput) urlInput.value = dataUrl;
+        if (fnInput) fnInput.value = file.name;
+        if (fnEl) fnEl.textContent = file.name;
+        if (statusEl) statusEl.textContent = `Logo selected (${(file.size / 1024).toFixed(0)} KB) · Click Save Changes to publish`;
+        if (previewBox) {
+          previewBox.innerHTML = `
+            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;">
+              <span class="media-type-badge image">🏷️ LOGO PREVIEW</span>
+              <span style="font-family:var(--mono);font-size:10px;color:#64748b;">PREVIEW BEFORE SAVING</span>
+            </div>
+            <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:4px;padding:12px 20px;display:flex;align-items:center;justify-content:center;min-width:180px;min-height:70px;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+              <img src="${dataUrl}" alt="Logo Preview" style="max-height:60px;max-width:220px;object-fit:contain;display:block;" />
+            </div>
+          `;
+          previewBox.classList.remove('hidden');
+        }
+        if (clearBtn) clearBtn.classList.remove('hidden');
+
+        // Backend upload persistence
+        try {
+          const token = sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY) || '';
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ filename: file.name, fileData: dataUrl })
+          });
+          if (res.ok) {
+            const result = await res.json();
+            if (result.url) {
+              if (urlInput) urlInput.value = result.url;
+              if (fnInput) fnInput.value = result.filename || file.name;
+              if (statusEl) statusEl.textContent = `Uploaded as ${result.filename} (${(file.size / 1024).toFixed(0)} KB) · Click Save Changes to publish`;
+            }
+          } else {
+            const err = await res.json().catch(() => ({}));
+            showClientError(idx, `Upload notice: ${err.error || 'Saved as local asset data'}`);
+          }
+        } catch (_) {}
+
+        collectFormData();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Render Clientele Form
+    function renderClienteleForm() {
+      if (!Array.isArray(currentData.clientele)) currentData.clientele = [];
+      const list = document.getElementById('clientele-list');
+      if (!list) return;
+
+      const total = currentData.clientele.length;
+      const pubCount = currentData.clientele.filter(c => c.isPublished !== false).length;
+      const badgeEl = document.getElementById('clientele-count-badge');
+      if (badgeEl) badgeEl.textContent = `${pubCount} Published / ${total} Total`;
+
+      if (total === 0) {
+        list.innerHTML = `
+          <div style="background:#fff;border:1px dashed var(--line);border-radius:6px;padding:36px;text-align:center;">
+            <p style="font-size:14px;color:var(--navy);font-weight:600;margin:0 0 6px 0;">No client entries yet</p>
+            <p style="font-size:12px;color:var(--muted);margin:0 0 16px 0;">Add company logos and details to showcase precision partnerships on the public website.</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = currentData.clientele.map((c, index) => {
+        const isPub = c.isPublished !== false;
+        return `
+          <div class="client-item-card" data-index="${index}" data-client-id="${c.id || index}" draggable="true">
+            <div class="card-head" style="display:flex;justify-content:space-between;align-items:center;background:#f9fafb;padding:12px 16px;margin:-20px -20px 16px -20px;border-bottom:1px solid var(--line);border-radius:6px 6px 0 0;">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <span class="drag-handle" title="Drag to reorder client">⋮⋮</span>
+                <span class="badge" style="background:var(--navy);color:#fff;font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:2px;">ORDER #${index + 1}</span>
+                <strong class="client-card-title" style="font-size:14px;color:var(--navy);">${escapeAdmin(c.companyName || 'New Client Company')}</strong>
+                <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:10px;font-weight:600;${isPub ? 'background:#def7ec;color:#03543f;' : 'background:#f3f4f6;color:#6b7280;'}">
+                  ${isPub ? '● PUBLISHED' : '○ DRAFT'}
+                </span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <button type="button" class="btn btn-outline move-client-up" data-index="${index}" title="Move client up" ${index === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} style="padding:4px 9px;font-size:11px;">▲ Up</button>
+                <button type="button" class="btn btn-outline move-client-down" data-index="${index}" title="Move client down" ${index === total - 1 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''} style="padding:4px 9px;font-size:11px;">▼ Down</button>
+                <button type="button" class="btn btn-danger delete-client" data-index="${index}" style="padding:4px 10px;font-size:11px;">Delete</button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="flex:2;">
+                <label>Company Name <span class="req" style="color:#e02424;">*</span></label>
+                <input type="text" class="client-name-input" data-index="${index}" value="${escapeAdmin(c.companyName || '')}" placeholder="e.g. Lakshmi Machine Works (LMW)" required />
+              </div>
+              <div class="form-group" style="flex:2;">
+                <label>Website URL (Optional)</label>
+                <input type="url" class="client-url-input" data-index="${index}" value="${escapeAdmin(c.websiteUrl || '')}" placeholder="e.g. https://www.lmwcnc.com" />
+              </div>
+              <div class="form-group" style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+                <label>Visibility on Website</label>
+                <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:6px;">
+                  <input type="checkbox" class="client-published-input" data-index="${index}" ${isPub ? 'checked' : ''} />
+                  <span>Published</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Short Description (Optional)</label>
+              <textarea class="client-desc-input" data-index="${index}" rows="2" placeholder="e.g. Leading CNC machine tool and precision equipment manufacturer.">${escapeAdmin(c.description || '')}</textarea>
+            </div>
+
+            <div class="form-group media-upload-group" style="margin-bottom:0;">
+              <label style="font-weight:700;color:var(--navy);font-size:12px;">Client Company Logo (PNG, JPG, JPEG, WebP, SVG · Max 5MB)</label>
+              <div class="media-upload-container">
+                <div class="media-preview-box ${c.logo ? '' : 'hidden'}" id="client-preview-${index}" style="background:#f1f5f9;border:1px solid #cbd5e1;padding:14px;border-radius:4px;display:flex;flex-direction:column;align-items:center;margin-bottom:8px;">
+                  ${c.logo ? `
+                    <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;">
+                      <span class="media-type-badge image">🏷️ LOGO PREVIEW</span>
+                      <span style="font-family:var(--mono);font-size:10px;color:#64748b;">ACTIVE LOGO ASSET</span>
+                    </div>
+                    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:4px;padding:12px 20px;display:flex;align-items:center;justify-content:center;min-width:180px;min-height:70px;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                      <img src="${c.logo}" alt="Client Logo" style="max-height:60px;max-width:220px;object-fit:contain;display:block;" onerror="this.style.display='none';" />
+                    </div>
+                  ` : ''}
+                </div>
+                <div class="media-filemanager-bar" data-index="${index}" id="client-filebar-${index}">
+                  <div class="media-file-info">
+                    <span class="media-file-icon">🏷️</span>
+                    <div class="media-file-text">
+                      <strong id="client-filename-${index}">${c.logoFileName || (c.logo ? 'Saved Client Logo' : 'No logo selected')}</strong>
+                      <span id="client-status-${index}">${c.logo ? 'Active on clientele display' : 'Drag & drop SVG/PNG/JPG/WebP or click button'}</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <input type="file" class="client-logo-file" id="client-file-input-${index}" accept=".svg,.png,.jpg,.jpeg,.webp,image/svg+xml,image/png,image/jpeg,image/webp" style="display:none;" data-index="${index}" />
+                    <button type="button" class="btn-filemanager browse-client-logo-btn" data-index="${index}">
+                      <span>📂</span> Choose Logo File
+                    </button>
+                    <button type="button" class="btn btn-outline clear-client-logo-btn ${c.logo ? '' : 'hidden'}" id="clear-client-logo-${index}" data-index="${index}">Remove Logo</button>
+                  </div>
+                </div>
+                <div class="upload-error-msg hidden" id="client-error-${index}"></div>
+                <input type="hidden" class="client-logo-url" id="client-logo-${index}" value="${escapeAdmin(c.logo || '')}" />
+                <input type="hidden" class="client-logo-filename" id="client-logofilename-${index}" value="${escapeAdmin(c.logoFileName || '')}" />
+                <input type="hidden" class="client-id-val" value="${c.id || ''}" />
+                <input type="hidden" class="client-order-val" value="${c.displayOrder || index + 1}" />
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      attachClienteleEvents();
+    }
+
+    function attachClienteleEvents() {
+      const list = document.getElementById('clientele-list');
+      if (!list) return;
+
+      list.querySelectorAll('input, textarea').forEach(el => {
+        el.addEventListener('input', () => {
+          collectFormData();
+          const card = el.closest('.client-item-card');
+          const titleEl = card?.querySelector('.client-card-title');
+          const nameInput = card?.querySelector('.client-name-input');
+          if (titleEl && nameInput) {
+            titleEl.textContent = nameInput.value.trim() || 'New Client Company';
+          }
+        });
+      });
+
+      list.querySelectorAll('.client-published-input').forEach(chk => {
+        chk.addEventListener('change', () => {
+          collectFormData();
+          renderClienteleForm();
+        });
+      });
+
+      list.querySelectorAll('.delete-client').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          const name = currentData.clientele[idx]?.companyName || 'this client';
+          if (confirm(`Delete "${name}" from clientele showcase?`)) {
+            collectFormData();
+            currentData.clientele.splice(idx, 1);
+            currentData.clientele.forEach((c, i) => { c.displayOrder = i + 1; });
+            renderClienteleForm();
+            showToast('Client removed.');
+          }
+        });
+      });
+
+      list.querySelectorAll('.move-client-up').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          if (idx > 0) {
+            collectFormData();
+            const temp = currentData.clientele[idx];
+            currentData.clientele[idx] = currentData.clientele[idx - 1];
+            currentData.clientele[idx - 1] = temp;
+            currentData.clientele.forEach((c, i) => { c.displayOrder = i + 1; });
+            renderClienteleForm();
+            showToast('Client moved up.');
+          }
+        });
+      });
+
+      list.querySelectorAll('.move-client-down').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index, 10);
+          if (idx < currentData.clientele.length - 1) {
+            collectFormData();
+            const temp = currentData.clientele[idx];
+            currentData.clientele[idx] = currentData.clientele[idx + 1];
+            currentData.clientele[idx + 1] = temp;
+            currentData.clientele.forEach((c, i) => { c.displayOrder = i + 1; });
+            renderClienteleForm();
+            showToast('Client moved down.');
+          }
+        });
+      });
+
+      list.querySelectorAll('.browse-client-logo-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.dataset.index;
+          document.getElementById(`client-file-input-${idx}`)?.click();
+        });
+      });
+
+      list.querySelectorAll('.client-logo-file').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const idx = input.dataset.index;
+          if (e.target.files && e.target.files[0]) {
+            handleClientLogoFile(e.target.files[0], idx);
+          }
+        });
+      });
+
+      list.querySelectorAll('.media-filemanager-bar').forEach(bar => {
+        const idx = bar.dataset.index;
+        bar.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          bar.classList.add('dragover');
+        });
+        bar.addEventListener('dragleave', () => bar.classList.remove('dragover'));
+        bar.addEventListener('drop', (e) => {
+          e.preventDefault();
+          bar.classList.remove('dragover');
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleClientLogoFile(e.dataTransfer.files[0], idx);
+          }
+        });
+      });
+
+      list.querySelectorAll('.clear-client-logo-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.dataset.index;
+          const urlInput = document.getElementById(`client-logo-${idx}`);
+          const fnInput = document.getElementById(`client-logofilename-${idx}`);
+          const previewBox = document.getElementById(`client-preview-${idx}`);
+          const fnEl = document.getElementById(`client-filename-${idx}`);
+          const statusEl = document.getElementById(`client-status-${idx}`);
+
+          if (urlInput) urlInput.value = '';
+          if (fnInput) fnInput.value = '';
+          if (previewBox) {
+            previewBox.innerHTML = '';
+            previewBox.classList.add('hidden');
+          }
+          if (fnEl) fnEl.textContent = 'No logo selected';
+          if (statusEl) statusEl.textContent = 'Drag & drop SVG/PNG/JPG/WebP or click button';
+          btn.classList.add('hidden');
+          hideClientError(idx);
+          collectFormData();
+        });
+      });
+
+      // HTML5 Drag & Drop reordering
+      let dragSrcIdx = null;
+      list.querySelectorAll('.client-item-card').forEach(card => {
+        card.addEventListener('dragstart', (e) => {
+          dragSrcIdx = parseInt(card.dataset.index, 10);
+          e.dataTransfer.effectAllowed = 'move';
+          card.classList.add('dragging');
+        });
+        card.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          card.classList.add('drag-over');
+        });
+        card.addEventListener('dragleave', () => {
+          card.classList.remove('drag-over');
+        });
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          card.classList.remove('drag-over');
+          const targetIdx = parseInt(card.dataset.index, 10);
+          if (dragSrcIdx !== null && dragSrcIdx !== targetIdx) {
+            collectFormData();
+            const moved = currentData.clientele.splice(dragSrcIdx, 1)[0];
+            currentData.clientele.splice(targetIdx, 0, moved);
+            currentData.clientele.forEach((c, i) => { c.displayOrder = i + 1; });
+            renderClienteleForm();
+            showToast('Clients reordered.');
+          }
+        });
+        card.addEventListener('dragend', () => {
+          card.classList.remove('dragging');
+          list.querySelectorAll('.client-item-card').forEach(c => c.classList.remove('drag-over'));
+        });
+      });
+    }
+
+    window.handleClientLogoFile = handleClientLogoFile;
+    window.renderClienteleForm = renderClienteleForm;
+
+    // Gather all fields into currentData
+    function collectFormData() {
+      // 1. Products
+      const prodCards = document.querySelectorAll('#products-list .card');
+      currentData.products = Array.from(prodCards).map((card, i) => {
+        const orig = currentData.products[i] || {};
+        const urlEl = card.querySelector('.prod-media-url');
+        const typeEl = card.querySelector('.prod-media-type');
+        const fnEl = card.querySelector('.prod-media-filename');
+        const mediaUrl = urlEl ? urlEl.value.trim() : (orig.mediaUrl || '');
+        const mediaType = typeEl && typeEl.value.trim()
+          ? typeEl.value.trim()
+          : (mediaUrl.match(/\.(mp4|webm|mov|ogg)($|\?)/i) || mediaUrl.startsWith('data:video') ? 'video' : 'image');
+        const mediaFileName = fnEl ? fnEl.value.trim() : (orig.mediaFileName || '');
+
+        return {
+          id: orig.id || `prod-${Date.now()}-${i}`,
+          title: card.querySelector('.prod-title').value.trim(),
+          label: card.querySelector('.prod-label').value.trim(),
+          metric: (card.querySelector('.prod-metric')?.value || orig.metric || '').trim(),
+          description: card.querySelector('.prod-desc').value.trim(),
+          mediaUrl,
+          mediaType,
+          mediaFileName
+        };
+      });
+
+      // 1b. Final Climax Showcase Media
+      const fsUrlEl = document.getElementById('final-media-url');
+      const fsTypeEl = document.getElementById('final-media-type');
+      const fsFnEl = document.getElementById('final-media-filename-input');
+      const fsTitleEl = document.getElementById('final-showcase-title');
+      const fsBadgeEl = document.getElementById('final-showcase-badge');
+      const fsMetricEl = document.getElementById('final-showcase-metric');
+      const fsDescEl = document.getElementById('final-showcase-desc');
+
+      const fsOrig = currentData.finalShowcase || {};
+      const fsUrl = fsUrlEl ? fsUrlEl.value.trim() : (fsOrig.mediaUrl || '');
+      const fsType = fsTypeEl && fsTypeEl.value.trim()
+        ? fsTypeEl.value.trim()
+        : (fsUrl.match(/\.(mp4|webm|mov|ogg)($|\?)/i) || fsUrl.startsWith('data:video') ? 'video' : 'image');
+
+      currentData.finalShowcase = {
+        title: fsTitleEl && fsTitleEl.value.trim() ? fsTitleEl.value.trim() : (fsOrig.title || 'FULLY INTEGRATED PRECISION CNC CENTER'),
+        badge: fsBadgeEl && fsBadgeEl.value.trim() ? fsBadgeEl.value.trim() : (fsOrig.badge || 'FINAL CONVERGENCE'),
+        metric: fsMetricEl && fsMetricEl.value.trim() ? fsMetricEl.value.trim() : (fsOrig.metric || '5-AXIS MASTER DATUM'),
+        description: fsDescEl ? fsDescEl.value.trim() : (fsOrig.description || ''),
+        mediaUrl: fsUrl,
+        mediaType: fsType,
+        mediaFileName: fsFnEl ? fsFnEl.value.trim() : (fsOrig.mediaFileName || '')
+      };
+
+      // 2. Capabilities
+      currentData.capabilities.headline = document.getElementById('cap-headline').value.trim();
+      currentData.capabilities.lead = document.getElementById('cap-lead').value.trim();
+      const stepCards = document.querySelectorAll('#capabilities-steps-list .card');
+      currentData.capabilities.steps = Array.from(stepCards).map((card, i) => ({
+        num: card.querySelector('.step-num').value.trim(),
+        title: card.querySelector('.step-title').value.trim(),
+        detail: card.querySelector('.step-detail').value.trim()
+      }));
+
+      // 3. Gallery
+      const galCards = document.querySelectorAll('#gallery-list .card');
+      currentData.gallery = Array.from(galCards).map((card, i) => ({
+        id: currentData.gallery[i]?.id || `gal-${Date.now()}-${i}`,
+        title: card.querySelector('.gal-title').value.trim(),
+        num: card.querySelector('.gal-num').value.trim(),
+        image: card.querySelector('.gal-img').value.trim(),
+        large: card.querySelector('.gal-large').checked,
+        alt: card.querySelector('.gal-title').value.trim()
+      }));
+
+      // 4. Contact
+      currentData.contact = {
+        phone1: document.getElementById('contact-phone1').value.trim(),
+        phone2: document.getElementById('contact-phone2').value.trim(),
+        email: document.getElementById('contact-email').value.trim(),
+        address: document.getElementById('contact-address').value.trim(),
+        whatsapp: document.getElementById('contact-whatsapp').value.trim(),
+        whatsappMessage: document.getElementById('contact-whatsapp-msg').value.trim(),
+        mapUrl: document.getElementById('contact-map').value.trim()
+      };
+
+      // 5. Clientele
+      const clientCards = document.querySelectorAll('#clientele-list .client-item-card');
+      if (clientCards.length > 0) {
+        currentData.clientele = Array.from(clientCards).map((card, i) => {
+          const orig = (currentData.clientele || [])[i] || {};
+          const nameInput = card.querySelector('.client-name-input');
+          const urlInput = card.querySelector('.client-url-input');
+          const descInput = card.querySelector('.client-desc-input');
+          const pubInput = card.querySelector('.client-published-input');
+          const logoUrlInput = card.querySelector('.client-logo-url');
+          const logoFnInput = card.querySelector('.client-logo-filename');
+          const idVal = card.querySelector('.client-id-val')?.value || orig.id || `client-${Date.now()}-${i}`;
+
+          return {
+            id: idVal,
+            companyName: nameInput ? nameInput.value.trim() : (orig.companyName || ''),
+            logo: logoUrlInput ? logoUrlInput.value.trim() : (orig.logo || ''),
+            logoFileName: logoFnInput ? logoFnInput.value.trim() : (orig.logoFileName || ''),
+            description: descInput ? descInput.value.trim() : (orig.description || ''),
+            websiteUrl: urlInput ? urlInput.value.trim() : (orig.websiteUrl || ''),
+            displayOrder: i + 1,
+            isPublished: pubInput ? pubInput.checked : (orig.isPublished !== false),
+            createdAt: orig.createdAt || new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          };
+        });
+      } else if (!Array.isArray(currentData.clientele)) {
+        currentData.clientele = [];
+      }
+    }
+
+    // Add buttons
+    document.getElementById('add-product-btn').addEventListener('click', () => {
+      collectFormData();
+      const num = String(currentData.products.length + 1).padStart(2, '0');
+      currentData.products.push({
+        id: `prod-${Date.now()}`,
+        title: 'New Precision System',
+        label: `${num} / PRECISION DEFENSE`,
+        metric: 'CUSTOM STROKE',
+        description: 'Engineered protective cover designed for industrial machine tool specifications.',
+        mediaUrl: '',
+        mediaType: 'image',
+        mediaFileName: ''
+      });
+      renderProductsForm();
+    });
+
+    // Final Showcase Media Buttons
+    document.getElementById('browse-final-media-btn')?.addEventListener('click', () => {
+      document.getElementById('final-media-file-input')?.click();
+    });
+
+    document.getElementById('final-media-file-input')?.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        handleFinalMediaFile(e.target.files[0]);
+      }
+    });
+
+    const finalBar = document.getElementById('final-media-bar');
+    if (finalBar) {
+      finalBar.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        finalBar.classList.add('dragover');
+      });
+      finalBar.addEventListener('dragleave', () => {
+        finalBar.classList.remove('dragover');
+      });
+      finalBar.addEventListener('drop', (e) => {
+        e.preventDefault();
+        finalBar.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          handleFinalMediaFile(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    document.getElementById('clear-final-media-btn')?.addEventListener('click', () => {
+      const fsUrlInput = document.getElementById('final-media-url');
+      const fsTypeInput = document.getElementById('final-media-type');
+      const fsFnInput = document.getElementById('final-media-filename-input');
+      const fsFileInput = document.getElementById('final-media-file-input');
+      const fsPreviewBox = document.getElementById('final-media-preview');
+      const fsFnEl = document.getElementById('final-media-filename');
+      const fsStatusEl = document.getElementById('final-media-status');
+      const fsClearBtn = document.getElementById('clear-final-media-btn');
+      const fsIconEl = document.getElementById('final-media-icon');
+
+      if (fsUrlInput) fsUrlInput.value = '';
+      if (fsTypeInput) fsTypeInput.value = '';
+      if (fsFnInput) fsFnInput.value = '';
+      if (fsFileInput) fsFileInput.value = '';
+      if (fsFnEl) fsFnEl.textContent = 'No file selected from computer';
+      if (fsStatusEl) fsStatusEl.textContent = 'Upload final MP4/WebM video or high-res JPG/PNG';
+      if (fsIconEl) fsIconEl.textContent = '🎥';
+      if (fsPreviewBox) {
+        fsPreviewBox.innerHTML = '';
+        fsPreviewBox.classList.add('hidden');
+      }
+      if (fsClearBtn) fsClearBtn.classList.add('hidden');
+      collectFormData();
+    });
+
+    document.getElementById('add-step-btn').addEventListener('click', () => {
+      collectFormData();
+      const num = String(currentData.capabilities.steps.length + 1).padStart(2, '0');
+      currentData.capabilities.steps.push({
+        num: num,
+        title: 'New Process Phase',
+        detail: 'Detailed engineering consultation and workflow coordinate.'
+      });
+      renderCapabilitiesForm();
+    });
+
+    document.getElementById('add-gallery-btn').addEventListener('click', () => {
+      collectFormData();
+      const num = String(currentData.gallery.length + 1).padStart(2, '0');
+      currentData.gallery.push({
+        id: `gal-${Date.now()}`,
+        num: num,
+        title: 'NEW WORKSHOP SCENE',
+        image: '/frames/frame_0070.webp',
+        large: false,
+        alt: 'Workshop process scene'
+      });
+      renderGalleryForm();
+    });
+
+    // Add Client Button
+    document.getElementById('add-client-btn')?.addEventListener('click', () => {
+      collectFormData();
+      if (!Array.isArray(currentData.clientele)) currentData.clientele = [];
+      currentData.clientele.push({
+        id: `client-${Date.now()}`,
+        companyName: '',
+        logo: '',
+        logoFileName: '',
+        description: '',
+        websiteUrl: '',
+        displayOrder: currentData.clientele.length + 1,
+        isPublished: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+      renderClienteleForm();
+    });
+
+    // Save
+    document.getElementById('save-btn').addEventListener('click', () => {
+      collectFormData();
+      const saved = saveContent(currentData);
+      if (saved) {
+        showToast('Changes saved successfully! Live site updated.');
+      } else {
+        alert('Warning: Browser storage limit exceeded! High-resolution video or large images took up more than available browser memory. Try compressing video clips under 15MB or using URL links.');
+      }
+    });
+
+    // Reset
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      if (confirm('Reset all content back to factory defaults?')) {
+        resetContent();
+        currentData = loadContent();
+        renderAll();
+        showToast('Reset to original default specifications.');
+      }
+    });
+
+    function renderAll() {
+      renderProductsForm();
+      renderCapabilitiesForm();
+      renderGalleryForm();
+      renderClienteleForm();
+      renderContactForm();
+    }
+
+    // --- Authentication Gate Logic ---
+    const AUTH_KEY = 'mg_admin_auth_token';
+    const VALID_EMAILS = [
+      'modernguideways@gmail.com',
+      'admin@modernguideways.com',
+      'shyam@modernguideways.com'
+    ];
+    const DEFAULT_PASSWORDS = ['Modern@2026', 'modernguideways2026', 'admin2026'];
+
+    const authGate = document.getElementById('auth-gate');
+    const adminApp = document.getElementById('admin-app');
+    const loginForm = document.getElementById('admin-login-form');
+    const loginError = document.getElementById('login-error');
+    const emailInput = document.getElementById('admin-email');
+    const passwordInput = document.getElementById('admin-password');
+    const togglePwBtn = document.getElementById('toggle-pw');
+    const rememberMeBox = document.getElementById('remember-me');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    function isAuthenticated() {
+      return !!(sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY));
+    }
+
+    function showAdminApp() {
+      if (authGate) authGate.style.display = 'none';
+      if (adminApp) adminApp.style.display = 'block';
+    }
+
+    function showAuthGate() {
+      if (authGate) authGate.style.display = 'flex';
+      if (adminApp) adminApp.style.display = 'none';
+      if (emailInput) emailInput.value = '';
+      if (passwordInput) passwordInput.value = '';
+      if (loginError) loginError.style.display = 'none';
+    }
+
+    // Toggle password visibility
+    togglePwBtn?.addEventListener('click', () => {
+      const isPw = passwordInput.type === 'password';
+      passwordInput.type = isPw ? 'text' : 'password';
+      togglePwBtn.textContent = isPw ? '🔒' : '👁️';
+    });
+
+    // Handle Login submission
+    loginForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = (emailInput.value || '').trim().toLowerCase();
+      const pw = passwordInput.value || '';
+      
+      const customPw = localStorage.getItem('mg_custom_admin_password');
+      const validPw = customPw ? [customPw, ...DEFAULT_PASSWORDS] : DEFAULT_PASSWORDS;
+      
+      const emailMatches = VALID_EMAILS.includes(email);
+      const pwMatches = validPw.includes(pw);
+
+      if (emailMatches && pwMatches) {
+        const token = 'MG_AUTH_SESSION_' + Date.now();
+        if (rememberMeBox && rememberMeBox.checked) {
+          localStorage.setItem(AUTH_KEY, token);
+        } else {
+          sessionStorage.setItem(AUTH_KEY, token);
+        }
+        showAdminApp();
+        syncContentFromBackend().then(() => {
+          currentData = loadContent();
+          renderAll();
+          loadEnquiries();
+        });
+      } else {
+        loginError.style.display = 'flex';
+        if (!emailMatches && !pwMatches) {
+          loginError.textContent = 'Invalid administrator email and password.';
+        } else if (!emailMatches) {
+          loginError.textContent = 'Unrecognized administrator email address.';
+        } else {
+          loginError.textContent = 'Incorrect password. Access denied.';
+        }
+      }
+    });
+
+    // Handle Logout
+    logoutBtn?.addEventListener('click', () => {
+      if (confirm('Sign out from Modern Guideways Admin Console?')) {
+        sessionStorage.removeItem(AUTH_KEY);
+        localStorage.removeItem(AUTH_KEY);
+        showAuthGate();
+      }
+    });
+
+    // --- Leads loader ---
+    async function loadEnquiries() {
+      const listEl = document.getElementById('enquiries-list');
+      if (!listEl) return;
+      let list = [];
+      try {
+        const res = await fetch('/api/enquiries');
+        if (res.ok) {
+          const data = await res.json();
+          list = data.enquiries || [];
+        }
+      } catch (_) {}
+      if (list.length === 0) {
+        try {
+          list = JSON.parse(localStorage.getItem('mg_customer_enquiries') || '[]');
+        } catch (_) {}
+      }
+
+      if (list.length === 0) {
+        listEl.innerHTML = '<p style="color:var(--muted);font-size:13px;margin:0;">No customer enquiries recorded yet.</p>';
+        return;
+      }
+
+      listEl.innerHTML = list.map(item => `
+        <div style="background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--blue);padding:14px;border-radius:2px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <div>
+              <strong style="font-size:15px;color:var(--navy);">${item.name || 'Unnamed'}</strong>
+              ${item.company ? `<span style="color:var(--muted);font-size:12px;margin-left:8px;">(${item.company})</span>` : ''}
+            </div>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--muted);">${new Date(item.receivedAt || item.timestamp || Date.now()).toLocaleString()}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;margin-bottom:8px;">
+            ${item.phone ? `<span>📞 <a href="tel:${item.phone}" style="color:var(--blue);font-weight:600;">${item.phone}</a></span>` : ''}
+            ${item.email ? `<span>✉️ <a href="mailto:${item.email}" style="color:var(--blue);">${item.email}</a></span>` : ''}
+            <span style="background:#e1effe;color:#1e429f;padding:2px 8px;border-radius:2px;font-size:11px;font-weight:600;">${item.machineType || 'Machine'}</span>
+            <span style="background:#def7ec;color:#03543f;padding:2px 8px;border-radius:2px;font-size:11px;font-weight:600;">${item.protectionType || 'Cover'}</span>
+          </div>
+          ${item.stroke ? `<div style="font-size:12px;margin-bottom:4px;"><strong>Dimensions / Stroke:</strong> ${item.stroke}</div>` : ''}
+          ${item.notes ? `<div style="font-size:12px;color:#4b5563;font-style:italic;margin-top:6px;">"${item.notes}"</div>` : ''}
+          <div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);display:flex;gap:10px;">
+            <a href="https://wa.me/${(item.phone || '').replace(/[^0-9]/g, '')}" target="_blank" style="font-family:var(--mono);font-size:10px;color:#25d366;font-weight:600;text-decoration:none;">REPLY VIA WHATSAPP ↗</a>
+            ${item.email ? `<a href="mailto:${item.email}?subject=Modern%20Guideways%20Machine%20Cover%20Quotation" style="font-family:var(--mono);font-size:10px;color:var(--blue);font-weight:600;text-decoration:none;">REPLY VIA EMAIL ↗</a>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('refresh-enquiries-btn')?.addEventListener('click', loadEnquiries);
+
+    // Initial auth gate validation
+    if (isAuthenticated()) {
+      showAdminApp();
+      syncContentFromBackend().then(() => {
+        currentData = loadContent();
+        renderAll();
+        loadEnquiries();
+      });
+    } else {
+      showAuthGate();
+    }
+  </script>
+</body>
+</html>

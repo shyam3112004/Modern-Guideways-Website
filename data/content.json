@@ -1,0 +1,161 @@
+{
+  "products": [
+    {
+      "id": "bellows-cover",
+      "title": "Bellows Cover",
+      "label": "01 / WAY DEFENSE",
+      "metric": "STROKE 2400mm",
+      "description": "High-speed elastomeric accordion covers protecting precision guideways from heavy coolant and metal fines.",
+      "mediaUrl": "",
+      "mediaType": "image",
+      "mediaFileName": ""
+    },
+    {
+      "id": "safety-enclosure",
+      "title": "Safety Enclosure",
+      "label": "02 / PERIMETER ARMOR",
+      "metric": "ISO 23125 CERT",
+      "description": "Heavy-gauge modular machine housing with safety interlocks, acoustic dampening, and total fluid containment.",
+      "mediaUrl": "",
+      "mediaType": "image",
+      "mediaFileName": ""
+    },
+    {
+      "id": "cnc-milling-machine",
+      "title": "CNC Milling Center",
+      "label": "03 / CORE CENTER",
+      "metric": "5-AXIS DATUM",
+      "description": "High-torque machining center core serving as the structural datum for synchronized guideway protection systems.",
+      "mediaUrl": "",
+      "mediaType": "image",
+      "mediaFileName": ""
+    },
+    {
+      "id": "linear-guide-assemblies",
+      "title": "Linear Guide Assemblies",
+      "label": "04 / LINEAR PRECISION",
+      "metric": "P-GRADE PRELOAD",
+      "description": "Precision-ground recirculating rail and carriage assemblies delivering sub-micron motion linearity.",
+      "mediaUrl": "",
+      "mediaType": "image",
+      "mediaFileName": ""
+    },
+    {
+      "id": "roller-guard",
+      "title": "Roller Guard",
+      "label": "05 / RAPID APERTURE",
+      "metric": "SPEED 90 m/min",
+      "description": "Spring-tensioned stainless steel roll-up curtains engineered for restricted clearances and high-frequency traverse.",
+      "mediaUrl": "",
+      "mediaType": "image",
+      "mediaFileName": ""
+    },
+    {
+      "id": "telescopic-machine-cover",
+      "title": "Telescopic Machine Cover",
+      "label": "06 / HEAVY BALLISTIC",
+      "metric": "2.5mm COLD STEEL",
+      "description": "Multi-stage box-section steel telescoping guards with internal shock dampers to withstand heavy chip bombardment.",
+      "mediaUrl": "",
+      "mediaType": "image",
+      "mediaFileName": ""
+    },
+    {
+      "id": "steel-way-cover",
+      "title": "Steel Way Cover",
+      "label": "07 / SLIDEWAYS SHIELD",
+      "metric": "POLY WIPERS",
+      "description": "Precision-stepped telescoping steel way cover engineered for horizontal and vertical CNC bedways.",
+      "mediaUrl": "",
+      "mediaType": "image",
+      "mediaFileName": ""
+    }
+  ],
+  "finalShowcase": {
+    "title": "MODERN GUIDEWAYS CNC 5-AXIS CENTER",
+    "badge": "FINAL CONVERGENCE",
+    "metric": "5-AXIS MASTER DATUM",
+    "description": "Seven precision-engineered machine protection systems converging into a single unified CNC milling center.",
+    "mediaUrl": "/Final.mp4",
+    "mediaType": "video",
+    "mediaFileName": "Final.mp4"
+  },
+  "capabilities": {
+    "headline": "Made for the<br><em>real world.</em>",
+    "lead": "A considered approach starts with understanding the machine, the movement and the environment.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Understand the application",
+        "detail": "Machine type, travel, clearances and operating conditions."
+      },
+      {
+        "num": "02",
+        "title": "Plan the protection",
+        "detail": "Discuss the suitable cover category and configuration."
+      },
+      {
+        "num": "03",
+        "title": "Manufacture & service",
+        "detail": "Coordinate the work around the agreed requirement."
+      }
+    ]
+  },
+  "gallery": [
+    {
+      "id": "gal-1",
+      "title": "MACHINE SYSTEMS",
+      "num": "01",
+      "image": "/frames/frame_00032.jpg",
+      "large": true,
+      "alt": "MACHINE SYSTEMS"
+    },
+    {
+      "id": "gal-2",
+      "title": "WORKSHOP PROCESS",
+      "num": "02",
+      "image": "/frames/frame_00070.jpg",
+      "large": false,
+      "alt": "WORKSHOP PROCESS"
+    },
+    {
+      "id": "gal-3",
+      "title": "FABRICATION",
+      "num": "03",
+      "image": "/frames/frame_00096.jpg",
+      "large": false,
+      "alt": "FABRICATION"
+    },
+    {
+      "id": "gal-4",
+      "title": "INSPECTION",
+      "num": "04",
+      "image": "/frames/frame_00114.jpg",
+      "large": false,
+      "alt": "INSPECTION"
+    }
+  ],
+  "contact": {
+    "phone1": "+91 80564 38763",
+    "phone2": "+91 87781 21768",
+    "email": "modernguideways@gmail.com",
+    "address": "2/186, Gollapatti (Vill), Selliam Patti (Po), Palacode (Tk), Dharmapuri (Dt), Tamil Nadu – 636 809",
+    "whatsapp": "918056438763",
+    "whatsappMessage": "Hello Modern Guideways, I would like to discuss a machine cover requirement.",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=2%2F186%20Gollapatti%20Selliam%20Patti%20Palacode%20Dharmapuri%20Tamil%20Nadu%20636809"
+  },
+  "clientele": [
+    {
+      "id": "client-1794200973612",
+      "companyName": "R.V. Machine Tools",
+      "logo": "/uploads/logo_1794201116955_logo.png",
+      "logoFileName": "logo_1794201116955_logo.png",
+      "description": "",
+      "websiteUrl": "https://www.rvmachinetools.in/?utm_source=chatgpt.com",
+      "displayOrder": 1,
+      "isPublished": true,
+      "createdAt": "2026-11-09T05:09:33.612Z",
+      "updatedAt": "2026-11-09T05:11:59.362Z"
+    }
+  ]
+}
