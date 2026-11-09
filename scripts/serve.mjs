@@ -27,7 +27,10 @@ const server = http.createServer((req, res) => {
     if (existsSync(dataPath)) {
       try {
         const content = readFileSync(dataPath, 'utf-8');
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
+        });
         return res.end(content);
       } catch (e) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
