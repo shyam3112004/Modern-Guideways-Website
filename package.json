@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "build": "node scripts/build.mjs",
+    "start": "node scripts/serve.mjs dist",
     "preview": "node scripts/serve.mjs dist",
-    "deploy:vercel": "node scripts/build.mjs && vercel deploy dist --prod --yes --project modern-guideways-website --archive=tgz"
+    "deploy:vercel": "node scripts/build.mjs && vercel deploy --prod --yes --project modern-guideways-website"
   },
   "engines": {
     "node": "24.x"

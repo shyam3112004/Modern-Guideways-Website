@@ -1,4 +1,4 @@
-import { cp, mkdir, rm, readdir } from 'node:fs/promises';
+import { cp, mkdir, rm, readdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -11,6 +11,16 @@ await mkdir(out, { recursive: true });
 // Copy index.html and src assets
 await cp(resolve(root, 'index.html'), resolve(out, 'index.html'));
 await cp(resolve(root, 'src'), resolve(out, 'src'), { recursive: true });
+
+// Copy backend API serverless functions
+if (existsSync(resolve(root, 'api'))) {
+  await cp(resolve(root, 'api'), resolve(out, 'api'), { recursive: true });
+}
+
+// Copy package.json for module resolution
+if (existsSync(resolve(root, 'package.json'))) {
+  await cp(resolve(root, 'package.json'), resolve(out, 'package.json'));
+}
 
 // Copy admin console (both /admin.html and /admin/index.html)
 if (existsSync(resolve(root, 'admin.html'))) {
@@ -31,9 +41,21 @@ if (existsSync(resolve(root, 'data'))) {
 }
 
 // Copy configs
-for (const cfg of ['CNAME', 'vercel.json', 'netlify.toml', 'favicon.svg']) {
+for (const cfg of ['CNAME', 'netlify.toml', 'favicon.svg']) {
   if (existsSync(resolve(root, cfg))) {
     await cp(resolve(root, cfg), resolve(out, cfg));
+  }
+}
+
+// Prepare dist/vercel.json tailored for prebuilt deployment
+if (existsSync(resolve(root, 'vercel.json'))) {
+  try {
+    const vcfg = JSON.parse(await readFile(resolve(root, 'vercel.json'), 'utf-8'));
+    delete vcfg.buildCommand;
+    delete vcfg.outputDirectory;
+    await writeFile(resolve(out, 'vercel.json'), JSON.stringify(vcfg, null, 2), 'utf-8');
+  } catch (_) {
+    await cp(resolve(root, 'vercel.json'), resolve(out, 'vercel.json'));
   }
 }
 

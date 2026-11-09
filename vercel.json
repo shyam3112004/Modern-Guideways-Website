@@ -5,26 +5,27 @@
   "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
-  "routes": [
+  "functions": {
+    "api/**/*.js": {
+      "includeFiles": "data/**"
+    }
+  },
+  "rewrites": [
     {
-      "src": "/api/content",
-      "dest": "/data/content.json"
+      "source": "/admin",
+      "destination": "/admin.html"
     },
     {
-      "src": "/api/content/",
-      "dest": "/data/content.json"
+      "source": "/admin/",
+      "destination": "/admin.html"
     },
     {
-      "src": "/admin",
-      "dest": "/admin.html"
+      "source": "/clientele",
+      "destination": "/index.html"
     },
     {
-      "src": "/admin/",
-      "dest": "/admin.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/clientele/",
+      "destination": "/index.html"
     }
   ],
   "headers": [

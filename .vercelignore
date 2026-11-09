@@ -1,10 +1,23 @@
-dist/
-node_modules/
-product tab frames/
-source-materials/
-docs/
-prompts/
-skills/
-analysis/
-.git/
+dist
+dist/**
+node_modules
+node_modules/**
+Product tab Viedo
+Product tab Viedo/**
+Client Logo
+Client Logo/**
+source-materials
+source-materials/**
+docs
+docs/**
+prompts
+prompts/**
+skills
+skills/**
+public/screenshots
+public/screenshots/**
+public/analysis
+public/analysis/**
+.git
+.git/**
 
