@@ -7,6 +7,14 @@
   "trailingSlash": false,
   "routes": [
     {
+      "src": "/api/content",
+      "dest": "/data/content.json"
+    },
+    {
+      "src": "/api/content/",
+      "dest": "/data/content.json"
+    },
+    {
       "src": "/admin",
       "dest": "/admin.html"
     },
