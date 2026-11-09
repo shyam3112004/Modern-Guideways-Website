@@ -12,9 +12,9 @@ window.addEventListener('storage', (e) => {
 });
 
 // --- Hero Cinematic Animation ---
-const FRAME_COUNT = 196;
-const KEYFRAME_STEP = 10;
-const INITIAL_BURST = 8;
+const FRAME_COUNT = 1106;
+const KEYFRAME_STEP = 25;
+const INITIAL_BURST = 10;
 
 const canvas = document.querySelector('#story-canvas');
 const ctx = canvas ? canvas.getContext('2d', { alpha: false, desynchronized: true }) : null;
@@ -32,7 +32,7 @@ const descEl = document.querySelector('#story-description');
 const pipeline = new FramePipeline({
   frameCount: FRAME_COUNT,
   anchorStep: KEYFRAME_STEP,
-  maxCacheSize: 40,
+  maxCacheSize: 60,
   maxConcurrency: 4
 });
 

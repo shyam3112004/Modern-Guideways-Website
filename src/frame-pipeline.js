@@ -14,9 +14,9 @@
 
 export class FramePipeline {
   constructor(options = {}) {
-    this.frameCount = options.frameCount || 196;
-    this.anchorStep = options.anchorStep || 10;
-    this.maxCacheSize = options.maxCacheSize || 36;
+    this.frameCount = options.frameCount || 1106;
+    this.anchorStep = options.anchorStep || 25;
+    this.maxCacheSize = options.maxCacheSize || 60;
     this.maxConcurrency = options.maxConcurrency || 4;
 
     this.cache = new Map(); // frameIndex -> HTMLImageElement (rolling window)
@@ -39,7 +39,7 @@ export class FramePipeline {
   }
 
   getFrameUrl(index) {
-    return `/frames/frame_${String(index).padStart(4, '0')}.webp`;
+    return `/frames/frame_${String(index).padStart(5, '0')}.jpg`;
   }
 
   onFrameDecoded(callback) {

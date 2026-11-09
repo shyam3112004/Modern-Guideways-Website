@@ -147,138 +147,126 @@ export const DEFAULT_DATA = {
     mapUrl: 'https://www.google.com/maps/search/?api=1&query=2%2F186%20Gollapatti%20Selliam%20Patti%20Palacode%20Dharmapuri%20Tamil%20Nadu%20636809'
   },
   clientele: [
-  {
-    "id": "client-zf",
-    "companyName": "ZF Group",
-    "logo": "/uploads/01_ZF.png",
-    "logoFileName": "01_ZF.png",
-    "description": "Global technology leader in driveline, chassis, and advanced industrial mobility systems.",
-    "websiteUrl": "https://www.zf.com/",
-    "displayOrder": 1,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-jk-maini",
-    "companyName": "JK Maini Global Aerospace",
-    "logo": "/uploads/02_JK_Maini_Global_Aerospace.png",
-    "logoFileName": "02_JK_Maini_Global_Aerospace.png",
-    "description": "Aerospace & defense precision engineering, aircraft structure assemblies, and precision aero-engine components.",
-    "websiteUrl": "https://maini.com/",
-    "displayOrder": 2,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-akr",
-    "companyName": "AKR Express",
-    "logo": "/uploads/03_AKR_Since_1969.jpeg",
-    "logoFileName": "03_AKR_Since_1969.jpeg",
-    "description": "Premier express logistics and cargo transport network with dedicated industrial operations across South India since 1969.",
-    "websiteUrl": "https://www.akrexpress.com/",
-    "displayOrder": 3,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-rv-machine-tools",
-    "companyName": "R.V. Machine Tools",
-    "logo": "/uploads/logo_1794201116955_logo.png",
-    "logoFileName": "logo_1794201116955_logo.png",
-    "description": "Leading manufacturer of high-precision CNC lathes, turning centers, and heavy-duty special purpose machinery.",
-    "websiteUrl": "https://www.rvmachinetools.in/",
-    "displayOrder": 4,
-    "isPublished": true,
-    "createdAt": "2026-11-09T05:09:33.612Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-m-monogram",
-    "companyName": "Precision Engineering Partner (M)",
-    "logo": "/uploads/05_Unidentified_M_Monogram.png",
-    "logoFileName": "05_Unidentified_M_Monogram.png",
-    "description": "Specialized precision CNC machining, tooling, and industrial machine fabrication partner.",
-    "websiteUrl": "",
-    "displayOrder": 5,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-bhavani",
-    "companyName": "Bhavani Industries",
-    "logo": "/uploads/06_Bhavani.jpg",
-    "logoFileName": "06_Bhavani.jpg",
-    "description": "Precision machined components manufacturer with 120+ CNCs serving automotive, electronics, and medical industries.",
-    "websiteUrl": "https://www.bhavaniindustries.in/",
-    "displayOrder": 6,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-e2r-dfac",
-    "companyName": "E2R DFAC Technologies Pvt Ltd",
-    "logo": "/uploads/07_Technologies_Pvt_Ltd.png",
-    "logoFileName": "07_Technologies_Pvt_Ltd.png",
-    "description": "Enterprise workplace dining management, corporate catering coordination, and industrial facility solutions.",
-    "websiteUrl": "https://www.e2rdfac.com/",
-    "displayOrder": 7,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-velson",
-    "companyName": "Velson Drilling Dynamics",
-    "logo": "/uploads/08_Velson_Drilling_Dynamics.webp",
-    "logoFileName": "08_Velson_Drilling_Dynamics.webp",
-    "description": "Engineered water-well, exploration, blast hole, and specialised heavy mining & piling drilling equipment.",
-    "websiteUrl": "https://velson.in/",
-    "displayOrder": 8,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-seonics",
-    "companyName": "Southern Electronics (Seonics)",
-    "logo": "/uploads/09_SE.jpeg",
-    "logoFileName": "09_SE.jpeg",
-    "description": "Premier aerospace, defense, and industrial precision electronic systems, avionics, and specialized test equipment since 1971.",
-    "websiteUrl": "https://www.seonics.co.in/",
-    "displayOrder": 9,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-tcf",
-    "companyName": "Twin City Fan India (TCF)",
-    "logo": "/uploads/10_TCF_Logo_Mark.webp",
-    "logoFileName": "10_TCF_Logo_Mark.webp",
-    "description": "World-class industrial air movement solutions, custom process fans, blowers, and heavy ventilation systems.",
-    "websiteUrl": "https://in.tcf.com/",
-    "displayOrder": 10,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  },
-  {
-    "id": "client-yume",
-    "companyName": "Yume Newturn Private Limited",
-    "logo": "/uploads/11_Yume_Newturn.png",
-    "logoFileName": "11_Yume_Newturn.png",
-    "description": "Reputed manufacturer of Special Purpose Machines (SPMs), hydraulic systems, and 5-axis precision CNC/VMC machining.",
-    "websiteUrl": "https://www.yumenewturn.com/",
-    "displayOrder": 11,
-    "isPublished": true,
-    "createdAt": "2026-11-09T08:00:00.000Z",
-    "updatedAt": "2026-11-09T15:20:59.678Z"
-  }
+    {
+        "id": "client-marks-engineering",
+        "companyName": "Marks Engineering Works Pvt Ltd",
+        "logo": "/uploads/Marks_Engineering_Works_Pvt_Ltd.jpeg",
+        "logoFileName": "Marks Engineering Works Pvt Ltd.jpeg",
+        "description": "Leading CNC machine tool, precision fabrication, and heavy industrial machinery manufacturer.",
+        "websiteUrl": "https://www.marksengineeringworks.com/",
+        "displayOrder": 1,
+        "isPublished": true,
+        "createdAt": "2026-11-09T08:00:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-bhavani-industries",
+        "companyName": "Bhavani Industries",
+        "logo": "/uploads/Bhavani_industries.jpeg",
+        "logoFileName": "Bhavani industries.jpeg",
+        "description": "Precision machined components manufacturer with 120+ CNCs serving automotive, electronics, and medical industries.",
+        "websiteUrl": "https://www.bhavaniindustries.in/",
+        "displayOrder": 2,
+        "isPublished": true,
+        "createdAt": "2026-11-09T08:00:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-dmw-cnc",
+        "companyName": "DMW CNC Solutions India Private Limited",
+        "logo": "/uploads/DMW_CNC_Solutions_India.jpeg",
+        "logoFileName": "DMW CNC Solutions India.jpeg",
+        "description": "Premier OEM supplier for high-precision CNC turned and milled components, sub-assemblies, and heavy machinery.",
+        "websiteUrl": "https://www.dmwindia.com/",
+        "displayOrder": 3,
+        "isPublished": true,
+        "createdAt": "2026-11-10T01:50:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-jrvd-defspace",
+        "companyName": "JRVD DefSpace Pvt Ltd",
+        "logo": "/uploads/JRVD_DefSpace.jpeg",
+        "logoFileName": "JRVD DefSpace.jpeg",
+        "description": "AS9100-certified precision engineering, CNC/VMC/HMC machining, and metal 3D printing for aerospace and defense.",
+        "websiteUrl": "https://jrvddefspace.com/",
+        "displayOrder": 4,
+        "isPublished": true,
+        "createdAt": "2026-11-10T01:50:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-rv-machine-tools",
+        "companyName": "R.V. Machine Tools",
+        "logo": "/uploads/RV_Machine_Tools.jpeg",
+        "logoFileName": "R.V.Machine Tools.jpeg",
+        "description": "Renowned manufacturer of high-precision heavy-duty CNC lathes, turning centers, and special purpose machinery.",
+        "websiteUrl": "https://www.rvmachinetools.in/",
+        "displayOrder": 5,
+        "isPublished": true,
+        "createdAt": "2026-11-09T05:09:33.612Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-technocast-foundry",
+        "companyName": "Technocast Foundry Pvt Ltd",
+        "logo": "/uploads/Technocast_Foundry_Pvt_Ltd.jpeg",
+        "logoFileName": "Technocast Foundry Pvt Ltd.jpeg",
+        "description": "Manufacturer and global exporter of high-grade grey iron, ductile (SG) iron castings, and machined components.",
+        "websiteUrl": "https://technocastfoundry.com/",
+        "displayOrder": 6,
+        "isPublished": true,
+        "createdAt": "2026-11-10T01:50:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-akr-machine-tools",
+        "companyName": "AKR Machine Tools",
+        "logo": "/uploads/AKR_Machine_Tools.jpeg",
+        "logoFileName": "AKR Machine Tools.jpeg",
+        "description": "Specialist manufacturer of Special Purpose Machines (SPMs), multi-spindle drilling/tapping heads, and machine automation.",
+        "websiteUrl": "https://akrmachinetools.com/",
+        "displayOrder": 7,
+        "isPublished": true,
+        "createdAt": "2026-11-10T01:50:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-velson-drilling",
+        "companyName": "Velson Drilling Dynamics",
+        "logo": "/uploads/VELSON_Drilling_Dynamics.jpeg",
+        "logoFileName": "VELSON Drilling Dynamics.jpeg",
+        "description": "Engineered water-well, exploration, blast hole, and specialised heavy mining & piling drilling equipment.",
+        "websiteUrl": "https://velson.in/",
+        "displayOrder": 8,
+        "isPublished": true,
+        "createdAt": "2026-11-09T08:00:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-sun-engineering",
+        "companyName": "Sun Engineering",
+        "logo": "/uploads/Sun_Engineering.jpeg",
+        "logoFileName": "sun Engineering.jpeg",
+        "description": "Trusted partner for precision sheet metal fabrication, CNC laser cutting, turret punching, and precision bending.",
+        "websiteUrl": "https://sunengineering.in/",
+        "displayOrder": 9,
+        "isPublished": true,
+        "createdAt": "2026-11-10T01:50:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    },
+    {
+        "id": "client-yume-newturn",
+        "companyName": "Yume Newturn Private Limited",
+        "logo": "/uploads/Yume_Newturn_Pvt_Ltd.jpeg",
+        "logoFileName": "Yume Newturn Pvt Ltd.jpeg",
+        "description": "Reputed manufacturer of Special Purpose Machines (SPMs), hydraulic systems, and 5-axis precision CNC/VMC machining.",
+        "websiteUrl": "https://www.yumenewturn.com/",
+        "displayOrder": 10,
+        "isPublished": true,
+        "createdAt": "2026-11-09T08:00:00.000Z",
+        "updatedAt": "2026-11-10T01:50:00.000Z"
+    }
 ]
 };
 
@@ -288,9 +276,9 @@ export function loadContent() {
     if (stored) {
       const parsed = JSON.parse(stored);
       // Detect legacy mock data or missing products
-      const isLegacy = !Array.isArray(parsed.products) ||
+      const isLegacy = !parsed._isCustomized && (!Array.isArray(parsed.products) ||
         parsed.products.length === 0 ||
-        parsed.products.some(p => p.id === 'prod-1' || p.visualType || p.id === 'prod-2');
+        parsed.products.some(p => p.id === 'prod-1' || p.visualType || p.id === 'prod-2'));
 
       if (isLegacy) {
         parsed.products = JSON.parse(JSON.stringify(DEFAULT_DATA.products));
@@ -298,7 +286,20 @@ export function loadContent() {
           localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...DEFAULT_DATA, ...parsed }));
         } catch (_) {}
       }
-      const clientList = Array.isArray(parsed.clientele) && parsed.clientele.length > 0 ? parsed.clientele : JSON.parse(JSON.stringify(DEFAULT_DATA.clientele));
+      
+      // Auto-upgrade legacy mock clients (ZF, JK Maini, AKR Express, M-Monogram)
+      const hasLegacyClients = Array.isArray(parsed.clientele) &&
+        parsed.clientele.some(c => c && (c.id === 'client-zf' || c.id === 'client-jk-maini' || c.id === 'client-akr' || c.id === 'client-m-monogram' || c.companyName === 'ZF Group'));
+      if (hasLegacyClients) {
+        parsed.clientele = JSON.parse(JSON.stringify(DEFAULT_DATA.clientele));
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...parsed, clientele: DEFAULT_DATA.clientele }));
+        } catch (_) {}
+      }
+
+      const clientList = Array.isArray(parsed.clientele)
+        ? parsed.clientele
+        : JSON.parse(JSON.stringify(DEFAULT_DATA.clientele));
       return {
         ...DEFAULT_DATA,
         ...parsed,
@@ -317,6 +318,10 @@ export function loadContent() {
 
 export function saveContent(data) {
   let success = true;
+  data._isCustomized = true;
+  data._updatedAt = Date.now();
+  data.updatedAt = new Date().toISOString();
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (e) {
@@ -340,24 +345,38 @@ export function saveContent(data) {
   return success;
 }
 
-export async function syncContentFromBackend() {
+export async function syncContentFromBackend(forceServer = false) {
   try {
-    let res = await fetch('/api/content').catch(() => null);
+    let res = await fetch('/api/content', { cache: 'no-store' }).catch(() => null);
     if (!res || !res.ok) {
-      res = await fetch('/data/content.json').catch(() => null);
+      res = await fetch('/data/content.json', { cache: 'no-store' }).catch(() => null);
     }
     if (res && res.ok) {
       const serverData = await res.json();
       if (serverData && typeof serverData === 'object') {
         const local = loadContent();
+
+        // If local has been customized by admin and forceServer is false, keep admin's custom data!
+        if (local && local._isCustomized && !forceServer) {
+          const serverTimestamp = serverData._updatedAt ? new Date(serverData._updatedAt).getTime() : 0;
+          const localTimestamp = local._updatedAt || (local.updatedAt ? new Date(local.updatedAt).getTime() : 0);
+
+          if (serverTimestamp <= localTimestamp) {
+            // Local is newer or equal: preserve local edits!
+            renderSiteContent(local);
+            return local;
+          }
+        }
+
         const serverClients = Array.isArray(serverData.clientele) && serverData.clientele.length > 0
           ? serverData.clientele
-          : (Array.isArray(local.clientele) && local.clientele.length > 0 ? local.clientele : DEFAULT_DATA.clientele);
+          : (Array.isArray(local?.clientele) && local.clientele.length > 0 ? local.clientele : DEFAULT_DATA.clientele);
+
         const merged = {
           ...DEFAULT_DATA,
-          ...local,
           ...serverData,
-          clientele: serverClients
+          clientele: serverClients,
+          _isCustomized: false
         };
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));

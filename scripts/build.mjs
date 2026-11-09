@@ -44,13 +44,13 @@ const exclude = new Set(['analysis', 'screenshots', 'product_animations', 'Final
 for (const entry of entries) {
   if (exclude.has(entry)) continue;
   if (entry === 'frames') {
-    // Only copy .webp frames used by FramePipeline (skip raw 530MB png dumps)
+    // Copy active JPG frames used by FramePipeline
     const framesDir = resolve(publicDir, 'frames');
     const outFramesDir = resolve(out, 'frames');
     await mkdir(outFramesDir, { recursive: true });
     const frameFiles = await readdir(framesDir);
     for (const f of frameFiles) {
-      if (f.endsWith('.webp')) {
+      if (f.endsWith('.jpg') || f.endsWith('.webp')) {
         await cp(resolve(framesDir, f), resolve(outFramesDir, f));
       }
     }

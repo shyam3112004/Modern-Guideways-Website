@@ -671,6 +671,7 @@
         </div>
       </div>
       <div class="admin-actions">
+        <button type="button" id="export-json-btn" class="btn btn-secondary" title="Download content.json for Vercel/GitHub repository">Export JSON ⤓</button>
         <button type="button" id="sync-server-btn" class="btn btn-secondary" title="Sync & pull latest data from server">Sync from Server ⟳</button>
         <a href="/" target="_blank" class="btn btn-secondary">View Live Site ↗</a>
         <button type="button" id="reset-btn" class="btn btn-secondary">Reset Defaults</button>
@@ -1829,7 +1830,7 @@
         id: `gal-${Date.now()}`,
         num: num,
         title: 'NEW WORKSHOP SCENE',
-        image: '/frames/frame_0070.webp',
+        image: '/frames/frame_00070.jpg',
         large: false,
         alt: 'Workshop process scene'
       });
@@ -2029,6 +2030,21 @@
       currentData = loadContent();
       renderAll();
       showToast('Clientele synced from server data/content.json!');
+    });
+
+    document.getElementById('export-json-btn')?.addEventListener('click', () => {
+      collectFormData();
+      const jsonStr = JSON.stringify(currentData, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'content.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('content.json downloaded! Commit & push to GitHub to deploy globally on Vercel.');
     });
 
     document.getElementById('sync-server-btn')?.addEventListener('click', async () => {
