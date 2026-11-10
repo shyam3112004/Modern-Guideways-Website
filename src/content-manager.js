@@ -464,7 +464,7 @@ export function renderSiteContent(data) {
                 customMedia = document.createElement('img');
                 customMedia.className = 'pwindow-custom-media';
                 customMedia.alt = p.title || 'Product media';
-                customMedia.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#020712;z-index:4;border-radius:2px;';
+                customMedia.loading = 'eager';
                 canvasWrap.appendChild(customMedia);
               }
               if (customMedia.src !== p.mediaUrl) {
