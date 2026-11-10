@@ -785,7 +785,7 @@
     <section class="tab-panel" id="tab-gallery">
       <div id="gallery-list"></div>
       <div class="add-btn-box">
-        <button type="button" id="add-gallery-btn" class="btn btn-outline">+ Add Gallery Image</button>
+        <button type="button" id="add-gallery-btn" class="btn btn-outline">+ Add Visual Story Item (Photo / Video)</button>
       </div>
     </section>
 
@@ -1195,40 +1195,108 @@
       });
     }
 
+    function handleGalleryMediaFile(file, idx) {
+      if (!file) return;
+      const isVideo = file.type.startsWith('video');
+      const previewBox = document.getElementById(`gal-media-preview-${idx}`);
+      const urlInput = document.getElementById(`gal-media-url-${idx}`);
+      const typeInput = document.getElementById(`gal-media-type-${idx}`);
+      const fileNameInput = document.getElementById(`gal-media-filename-input-${idx}`);
+      const fileNameEl = document.getElementById(`gal-media-filename-${idx}`);
+      const statusEl = document.getElementById(`gal-media-status-${idx}`);
+      const clearBtn = document.getElementById(`clear-gal-media-${idx}`);
+      const iconEl = document.getElementById(`gal-media-icon-${idx}`);
+
+      if (isVideo && file.size > 30 * 1024 * 1024) {
+        if (!confirm('This video exceeds 30MB. For optimal website loading speed and browser storage limits, we recommend smaller clips. Continue uploading?')) {
+          return;
+        }
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        const mediaType = isVideo ? 'video' : 'image';
+        if (urlInput) urlInput.value = dataUrl;
+        if (typeInput) typeInput.value = mediaType;
+        if (fileNameInput) fileNameInput.value = file.name;
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        if (statusEl) statusEl.textContent = `${mediaType.toUpperCase()} selected (${(file.size / 1024).toFixed(0)} KB) · Click Save Changes to publish`;
+        if (iconEl) iconEl.textContent = isVideo ? '🎥' : '📁';
+        if (previewBox) {
+          previewBox.innerHTML = renderMediaPreviewHtml(dataUrl, mediaType, file.name);
+          previewBox.classList.remove('hidden');
+        }
+        if (clearBtn) clearBtn.classList.remove('hidden');
+        collectFormData();
+      };
+      reader.readAsDataURL(file);
+    }
+
     // Render Gallery Form
     function renderGalleryForm() {
       const list = document.getElementById('gallery-list');
-      list.innerHTML = currentData.gallery.map((g, index) => `
+      list.innerHTML = currentData.gallery.map((g, index) => {
+        const mediaSrc = g.mediaUrl || g.image || '';
+        const isVideo = g.mediaType === 'video' || /\.(mp4|webm|mov|ogg)($|\?)/i.test(mediaSrc) || /^data:video\//i.test(mediaSrc);
+        const mediaType = isVideo ? 'video' : 'image';
+        return `
         <div class="card" data-gal-index="${index}">
           <div class="card-head">
-            <h3>Visual Story Card #${index + 1}: ${g.title}</h3>
+            <h3>Visual Story Card #${index + 1}: ${g.title || 'Scene'}</h3>
             <button type="button" class="btn btn-danger delete-gal" data-index="${index}">Remove</button>
           </div>
           <div class="form-row">
-            <div class="form-group">
+            <div class="form-group" style="flex:2;">
               <label>Title</label>
-              <input type="text" class="gal-title" value="${g.title}" />
+              <input type="text" class="gal-title" value="${g.title || ''}" />
             </div>
-            <div class="form-group">
+            <div class="form-group" style="flex:1;">
               <label>Index Label (e.g. 01)</label>
-              <input type="text" class="gal-num" value="${g.num}" />
+              <input type="text" class="gal-num" value="${g.num || ''}" />
             </div>
           </div>
+
+          <div class="form-group media-upload-group">
+            <label style="font-weight:700;color:var(--navy);font-size:12px;">Visual Story Media: Image or Video (Choose File from Computer)</label>
+            <div class="media-upload-container">
+              <div class="media-preview-box ${mediaSrc ? '' : 'hidden'}" id="gal-media-preview-${index}">
+                ${renderMediaPreviewHtml(mediaSrc, mediaType, g.mediaFileName)}
+              </div>
+              <div class="media-filemanager-bar" data-index="${index}">
+                <div class="media-file-info">
+                  <span class="media-file-icon" id="gal-media-icon-${index}">${isVideo ? '🎥' : '📁'}</span>
+                  <div class="media-file-text">
+                    <strong id="gal-media-filename-${index}">${g.mediaFileName || (mediaSrc ? 'Active Media File' : 'No file selected from computer')}</strong>
+                    <span id="gal-media-status-${index}">${mediaSrc ? 'Active on visual gallery' : 'Upload image (JPG, PNG, WebP) or video (MP4, WebM)'}</span>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <input type="file" class="gal-media-file" id="gal-file-input-${index}" accept="image/*,video/*" style="display:none;" data-index="${index}" />
+                  <button type="button" class="btn-filemanager browse-gal-media-btn" data-index="${index}">
+                    <span>📂</span> Choose File from Computer
+                  </button>
+                  <button type="button" class="btn btn-outline clear-gal-media-btn ${mediaSrc ? '' : 'hidden'}" id="clear-gal-media-${index}" data-index="${index}">Remove</button>
+                </div>
+              </div>
+              <!-- Internal data store -->
+              <input type="hidden" class="gal-img" id="gal-media-url-${index}" value="${mediaSrc}" />
+              <input type="hidden" class="gal-media-type" id="gal-media-type-${index}" value="${mediaType}" />
+              <input type="hidden" class="gal-media-filename" id="gal-media-filename-input-${index}" value="${g.mediaFileName || ''}" />
+            </div>
+          </div>
+
           <div class="form-row">
             <div class="form-group">
-              <label>Frame / Image Path</label>
-              <input type="text" class="gal-img" value="${g.image}" />
-              <img src="${g.image}" class="img-preview" alt="Preview" />
-            </div>
-            <div class="form-group">
-              <label class="checkbox-label">
+              <label class="checkbox-label" style="margin-top:6px;">
                 <input type="checkbox" class="gal-large" ${g.large ? 'checked' : ''} />
-                Featured Large Showcase Image
+                Featured Large Showcase Frame (Spans 2 rows on desktop)
               </label>
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
 
       list.querySelectorAll('.delete-gal').forEach(b => {
         b.addEventListener('click', () => {
@@ -1236,6 +1304,73 @@
           const idx = parseInt(b.dataset.index, 10);
           currentData.gallery.splice(idx, 1);
           renderGalleryForm();
+        });
+      });
+
+      // Attach File Manager Browse button events
+      list.querySelectorAll('.browse-gal-media-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.dataset.index;
+          const fileInput = document.getElementById(`gal-file-input-${idx}`);
+          fileInput?.click();
+        });
+      });
+
+      // Attach native input file change events
+      list.querySelectorAll('.gal-media-file').forEach(fileInput => {
+        fileInput.addEventListener('change', (e) => {
+          const idx = fileInput.dataset.index;
+          if (e.target.files && e.target.files[0]) {
+            handleGalleryMediaFile(e.target.files[0], idx);
+          }
+        });
+      });
+
+      // Attach Drag & Drop support to gallery media bar
+      list.querySelectorAll('.media-filemanager-bar').forEach(bar => {
+        const idx = bar.dataset.index;
+        bar.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          bar.classList.add('dragover');
+        });
+        bar.addEventListener('dragleave', () => {
+          bar.classList.remove('dragover');
+        });
+        bar.addEventListener('drop', (e) => {
+          e.preventDefault();
+          bar.classList.remove('dragover');
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleGalleryMediaFile(e.dataTransfer.files[0], idx);
+          }
+        });
+      });
+
+      // Attach Clear Media events
+      list.querySelectorAll('.clear-gal-media-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.dataset.index;
+          const urlInput = document.getElementById(`gal-media-url-${idx}`);
+          const typeInput = document.getElementById(`gal-media-type-${idx}`);
+          const fileNameInput = document.getElementById(`gal-media-filename-input-${idx}`);
+          const fileInput = document.getElementById(`gal-file-input-${idx}`);
+          const previewBox = document.getElementById(`gal-media-preview-${idx}`);
+          const fileNameEl = document.getElementById(`gal-media-filename-${idx}`);
+          const statusEl = document.getElementById(`gal-media-status-${idx}`);
+          const iconEl = document.getElementById(`gal-media-icon-${idx}`);
+
+          if (urlInput) urlInput.value = '';
+          if (typeInput) typeInput.value = 'image';
+          if (fileNameInput) fileNameInput.value = '';
+          if (fileInput) fileInput.value = '';
+          if (fileNameEl) fileNameEl.textContent = 'No file selected from computer';
+          if (statusEl) statusEl.textContent = 'Upload image (JPG, PNG, WebP) or video (MP4, WebM)';
+          if (iconEl) iconEl.textContent = '📁';
+          if (previewBox) {
+            previewBox.innerHTML = '';
+            previewBox.classList.add('hidden');
+          }
+          btn.classList.add('hidden');
+          collectFormData();
         });
       });
     }
@@ -1622,6 +1757,8 @@
 
     window.handleClientLogoFile = handleClientLogoFile;
     window.renderClienteleForm = renderClienteleForm;
+    window.handleGalleryMediaFile = handleGalleryMediaFile;
+    window.renderGalleryForm = renderGalleryForm;
 
     // Gather all fields into currentData
     function collectFormData() {
@@ -1687,14 +1824,27 @@
 
       // 3. Gallery
       const galCards = document.querySelectorAll('#gallery-list .card');
-      currentData.gallery = Array.from(galCards).map((card, i) => ({
-        id: currentData.gallery[i]?.id || `gal-${Date.now()}-${i}`,
-        title: card.querySelector('.gal-title').value.trim(),
-        num: card.querySelector('.gal-num').value.trim(),
-        image: card.querySelector('.gal-img').value.trim(),
-        large: card.querySelector('.gal-large').checked,
-        alt: card.querySelector('.gal-title').value.trim()
-      }));
+      currentData.gallery = Array.from(galCards).map((card, i) => {
+        const orig = (currentData.gallery || [])[i] || {};
+        const mediaUrl = card.querySelector('.gal-img')?.value.trim() || orig.mediaUrl || orig.image || '';
+        const typeEl = card.querySelector('.gal-media-type');
+        const fnEl = card.querySelector('.gal-media-filename');
+        const mediaType = typeEl && typeEl.value.trim()
+          ? typeEl.value.trim()
+          : (orig.mediaType || (/\.(mp4|webm|mov|ogg)($|\?)/i.test(mediaUrl) || /^data:video\//i.test(mediaUrl) ? 'video' : 'image'));
+        const mediaFileName = fnEl ? fnEl.value.trim() : (orig.mediaFileName || '');
+        return {
+          id: orig.id || `gal-${Date.now()}-${i}`,
+          title: card.querySelector('.gal-title')?.value.trim() || '',
+          num: card.querySelector('.gal-num')?.value.trim() || '',
+          image: mediaUrl,
+          mediaUrl: mediaUrl,
+          mediaType: mediaType,
+          mediaFileName: mediaFileName,
+          large: card.querySelector('.gal-large')?.checked || false,
+          alt: card.querySelector('.gal-title')?.value.trim() || ''
+        };
+      });
 
       // 4. Contact
       currentData.contact = {
@@ -1828,7 +1978,10 @@
         id: `gal-${Date.now()}`,
         num: num,
         title: 'NEW WORKSHOP SCENE',
-        image: '/frames/frame_00070.jpg',
+        image: '',
+        mediaUrl: '',
+        mediaType: 'image',
+        mediaFileName: '',
         large: false,
         alt: 'Workshop process scene'
       });

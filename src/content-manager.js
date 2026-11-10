@@ -577,12 +577,19 @@ export function renderSiteContent(data) {
   // 3. Render Gallery
   const galleryGrid = document.querySelector('.gallery-grid');
   if (galleryGrid && Array.isArray(data.gallery) && data.gallery.length > 0) {
-    galleryGrid.innerHTML = data.gallery.map(g => `
+    galleryGrid.innerHTML = data.gallery.map(g => {
+      const src = g.mediaUrl || g.image || '';
+      const isVideo = g.mediaType === 'video' || /\.(mp4|webm|mov|ogg)($|\?)/i.test(src) || /^data:video\//i.test(src);
+      return `
       <figure class="${g.large ? 'gallery-large' : ''}">
-        <img src="${g.image}" loading="lazy" alt="${g.alt || g.title}">
-        <figcaption><span>${g.num}</span> ${g.title}</figcaption>
+        ${isVideo
+          ? `<video src="${src}" autoplay muted loop playsinline></video>`
+          : `<img src="${src}" loading="lazy" alt="${g.alt || g.title || ''}">`
+        }
+        <figcaption><span>${g.num || ''}</span> ${g.title || ''}</figcaption>
       </figure>
-    `).join('');
+    `;
+    }).join('');
   }
 
   // 4. Render Contact Details
