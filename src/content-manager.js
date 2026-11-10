@@ -537,7 +537,8 @@ export function renderSiteContent(data) {
     const mediaContainer = document.getElementById('final-media-container');
     const canvas = document.getElementById('final-cnc-canvas');
     if (mediaContainer) {
-      if (fs.mediaUrl && fs.mediaUrl.trim()) {
+      const isSingleMedia = fs.mediaUrl && fs.mediaUrl.trim() && fs.mediaType !== 'frames' && !fs.mediaUrl.includes('cnc_assembly');
+      if (isSingleMedia) {
         const isVideo = fs.mediaType === 'video' || /\.(mp4|webm|mov|ogg)($|\?)/i.test(fs.mediaUrl) || fs.mediaUrl.startsWith('data:video');
         if (isVideo) {
           mediaContainer.innerHTML = `<video id="final-stage-video" src="${fs.mediaUrl}" autoplay loop muted playsinline class="final-stage-media" style="position:absolute;inset:0;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;display:block;background:#000;"></video>`;

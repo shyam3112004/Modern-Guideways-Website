@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.0 — 2026-11-10 — 6 Core Engineered Protection Systems & 500-Frame CNC Assembly Animation
+- Redesigned the Products tab with the exact six engineered products:
+  1. Telescopic Covers (`/products/telescopic-covers.png`)
+  2. Roller Covers (`/products/roller-covers.png`)
+  3. Apron Covers (`/products/apron-covers.png`)
+  4. Bellows (`/products/bellows.png`)
+  5. Lip Wipers (`/products/lip-wipers.png`)
+  6. Enclosing Guard (`/products/enclosing-guard.png`)
+- Configured perfectly balanced 3x2 architectural grid with crisp blueprint borders, technical metrics, and hover dynamics.
+- Integrated the 500-frame scroll-driven kinematic animation (`/cnc_assembly/frame_00001.jpg` to `frame_00500.jpg`) showcasing the complete CNC Machine Assembly with progressive scrub, convergence guidelines, and final CNC lockup.
+
 ## 1.3.0 — 2026-11-07 — Premium Industrial Art Direction & 7 Synchronized Kinematic Streams
 - Completely redesigned the Products tab (`#products`) with premium editorial industrial art direction matching high-end manufacturing standards.
 - Eliminated generic AI-dashboard styling, oversized typography, corner brackets, and black canvas containers.
