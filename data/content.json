@@ -1,84 +1,74 @@
 {
   "products": [
     {
-      "id": "bellows-cover",
-      "title": "Bellows Cover",
+      "id": "telescopic-covers",
+      "title": "Telescopic Covers",
       "label": "01 / WAY DEFENSE",
-      "metric": "STROKE 2400mm",
-      "description": "High-speed elastomeric accordion covers protecting precision guideways from heavy coolant and metal fines.",
-      "mediaUrl": "",
+      "metric": "SPEED 60m/min · 1.5–3mm STEEL",
+      "description": "Heavy-duty multi-section box steel covers with brass gliders and polyurethane wipers, safeguarding CNC, VMC and HMC machine bedways against sharp hot chips, heavy coolant washdown and mechanical collision.",
+      "mediaUrl": "/products/telescopic-covers.png",
       "mediaType": "image",
-      "mediaFileName": ""
+      "mediaFileName": "1. Telescopic Covers.png"
     },
     {
-      "id": "safety-enclosure",
-      "title": "Safety Enclosure",
-      "label": "02 / PERIMETER ARMOR",
-      "metric": "ISO 23125 CERT",
-      "description": "Heavy-gauge modular machine housing with safety interlocks, acoustic dampening, and total fluid containment.",
-      "mediaUrl": "",
+      "id": "roller-covers",
+      "title": "Roller Covers",
+      "label": "02 / RAPID APERTURE",
+      "metric": "SPEED 90m/min · CONSTANT TENSION",
+      "description": "High-velocity spring-tensioned roll-up curtains engineered with stainless steel bands or high-strength coated fabric for space-restricted machine axes, rapid cycle traverse, and coolant protection.",
+      "mediaUrl": "/products/roller-covers.png",
       "mediaType": "image",
-      "mediaFileName": ""
+      "mediaFileName": "2. Roller Covers.png"
     },
     {
-      "id": "cnc-milling-machine",
-      "title": "CNC Milling Center",
-      "label": "03 / CORE CENTER",
-      "metric": "5-AXIS DATUM",
-      "description": "High-torque machining center core serving as the structural datum for synchronized guideway protection systems.",
-      "mediaUrl": "",
+      "id": "apron-covers",
+      "title": "Apron Covers",
+      "label": "03 / SLAT DEFENSE",
+      "metric": "ALU-LINK · ARTICULATED SLATS",
+      "description": "Flexible interlocking anodized aluminum slats with high-durability polyurethane hinge joints, providing rugged deflection against heavy chip bombardment, deep drop-offs, and roll-up way protection.",
+      "mediaUrl": "/products/apron-covers.png",
       "mediaType": "image",
-      "mediaFileName": ""
+      "mediaFileName": "3Apron Covers.png"
     },
     {
-      "id": "linear-guide-assemblies",
-      "title": "Linear Guide Assemblies",
-      "label": "04 / LINEAR PRECISION",
-      "metric": "P-GRADE PRELOAD",
-      "description": "Precision-ground recirculating rail and carriage assemblies delivering sub-micron motion linearity.",
-      "mediaUrl": "",
+      "id": "bellows",
+      "title": "Bellows",
+      "label": "04 / EXPANSION SHIELD",
+      "metric": "STROKE 1:10 · 120m/min",
+      "description": "Precision accordion way bellows crafted from multi-ply coated fabric with internal PVC stiffener guides and optional stainless steel lamella scales, sealing laser, grinding, and multi-axis CNC slideways.",
+      "mediaUrl": "/products/bellows.png",
       "mediaType": "image",
-      "mediaFileName": ""
+      "mediaFileName": "4. Bellows.png"
     },
     {
-      "id": "roller-guard",
-      "title": "Roller Guard",
-      "label": "05 / RAPID APERTURE",
-      "metric": "SPEED 90 m/min",
-      "description": "Spring-tensioned stainless steel roll-up curtains engineered for restricted clearances and high-frequency traverse.",
-      "mediaUrl": "",
+      "id": "lip-wipers",
+      "title": "Lip Wipers",
+      "label": "05 / WAY WIPERS",
+      "metric": "85 SHORE A · PRELOADED LIP",
+      "description": "Precision-molded polyurethane and NBR elastomer guide wipers with rigid metal backings, continuously clearing microscopic fines, abrasive swarf, and fluid film to prevent guideway scoring.",
+      "mediaUrl": "/products/lip-wipers.png",
       "mediaType": "image",
-      "mediaFileName": ""
+      "mediaFileName": "5.Lip Wipers.png"
     },
     {
-      "id": "telescopic-machine-cover",
-      "title": "Telescopic Machine Cover",
-      "label": "06 / HEAVY BALLISTIC",
-      "metric": "2.5mm COLD STEEL",
-      "description": "Multi-stage box-section steel telescoping guards with internal shock dampers to withstand heavy chip bombardment.",
-      "mediaUrl": "",
+      "id": "enclosing-guard",
+      "title": "Enclosing Guard",
+      "label": "06 / PERIMETER ARMOR",
+      "metric": "ISO 23125 · CRCA STEEL",
+      "description": "Complete modular machine tool safety cabins featuring heavy-gauge CRCA sheet steel panels, impact-resistant laminated polycarbonate viewing windows, safety interlocks, and 100% fluid mist containment.",
+      "mediaUrl": "/products/enclosing-guard.png",
       "mediaType": "image",
-      "mediaFileName": ""
-    },
-    {
-      "id": "steel-way-cover",
-      "title": "Steel Way Cover",
-      "label": "07 / SLIDEWAYS SHIELD",
-      "metric": "POLY WIPERS",
-      "description": "Precision-stepped telescoping steel way cover engineered for horizontal and vertical CNC bedways.",
-      "mediaUrl": "",
-      "mediaType": "image",
-      "mediaFileName": ""
+      "mediaFileName": "6.Enclosing Guard.png"
     }
   ],
   "finalShowcase": {
     "title": "MODERN GUIDEWAYS CNC 5-AXIS CENTER",
-    "badge": "FINAL CONVERGENCE",
-    "metric": "5-AXIS MASTER DATUM",
-    "description": "Seven precision-engineered machine protection systems converging into a single unified CNC milling center.",
-    "mediaUrl": "/Final.mp4",
-    "mediaType": "video",
-    "mediaFileName": "Final.mp4"
+    "badge": "07 / MASTER DATUM · CNC ASSEMBLY ANIMATION",
+    "metric": "500-FRAME SCROLL KINEMATICS",
+    "description": "Six precision-engineered machine protection systems converging into a unified, fully protected CNC machining center.",
+    "mediaUrl": "",
+    "mediaType": "animation",
+    "mediaFileName": "Modern Guideways — CNC Assembly Animation"
   },
   "capabilities": {
     "headline": "Made for the<br><em>real world.</em>",
@@ -267,6 +257,6 @@
     }
   ],
   "_isCustomized": true,
-  "_updatedAt": 1794257559314,
-  "updatedAt": "2026-11-09T20:52:39.314Z"
+  "_updatedAt": 1794258000000,
+  "updatedAt": "2026-11-10T10:30:00.000Z"
 }

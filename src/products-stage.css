@@ -27,7 +27,7 @@
    ========================================================================== */
 .products-stage-section {
   position: relative;
-  height: 350vh;
+  height: 400vh;
   padding: 0;
   background: var(--mg-navy);
   color: var(--mg-white);
@@ -395,16 +395,15 @@
   will-change: opacity;
 }
 
-/* Row 1: 4 Products (each span 3 out of 12) */
-.pwindow-0 { grid-column: span 3; }
-.pwindow-1 { grid-column: span 3; }
-.pwindow-2 { grid-column: span 3; }
-.pwindow-3 { grid-column: span 3; }
+/* Row 1: 3 Products (each span 4 out of 12) */
+.pwindow-0 { grid-column: span 4; }
+.pwindow-1 { grid-column: span 4; }
+.pwindow-2 { grid-column: span 4; }
 
-/* Row 2: 3 Products (each span 4 out of 12, perfectly balanced and flush) */
+/* Row 2: 3 Products (each span 4 out of 12, perfectly balanced 3x2 grid) */
+.pwindow-3 { grid-column: span 4; }
 .pwindow-4 { grid-column: span 4; }
 .pwindow-5 { grid-column: span 4; }
-.pwindow-6 { grid-column: span 4; }
 
 /* Individual Product Window Card */
 .pwindow {
@@ -487,9 +486,18 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #020712;
+  object-position: center;
+  background: radial-gradient(circle at center, rgba(16, 42, 77, 0.45) 0%, #030a16 85%);
   z-index: 4;
   border-radius: 2px;
+  padding: 6px;
+  box-sizing: border-box;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+}
+
+.pwindow:hover .pwindow-custom-media {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 16px rgba(86, 168, 255, 0.3));
 }
 
 video.pwindow-custom-media {
@@ -1089,15 +1097,12 @@ video.pwindow-custom-media {
   .stage-subheadline { display: none; }
   .product-windows-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     gap: 8px;
     height: calc(100vh - 160px);
   }
   .pwindow-0, .pwindow-1, .pwindow-2, .pwindow-3, .pwindow-4, .pwindow-5 {
     grid-column: span 1;
-  }
-  .pwindow-6 {
-    grid-column: span 2;
   }
   .pwindow-desc { display: none; }
   .cnc-lockup-content {
