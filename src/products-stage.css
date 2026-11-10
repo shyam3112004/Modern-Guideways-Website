@@ -132,6 +132,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 /* Corner Drafting Registration Brackets */
@@ -1084,49 +1085,161 @@ video.pwindow-custom-media {
 /* ==========================================================================
    Responsive Adaptations
    ========================================================================== */
-@media (max-width: 1080px) {
+
+/* Ultra-wide Monitors & Large Mac Screens (1920px+) */
+@media (min-width: 1920px) {
   .product-windows-grid {
-    gap: 10px;
-    height: calc(100vh - 190px);
+    max-width: 1560px;
+    gap: 20px;
+  }
+  .final-combined-box {
+    max-width: 1300px;
+    max-height: 720px;
+  }
+  .stage-editorial-header {
+    max-width: 1560px;
+    margin: 0 auto;
+  }
+  .stage-bottom-timeline {
+    max-width: 1560px;
+    margin: 0 auto;
+  }
+}
+
+/* Tablets, iPad Landscape & Mobile (Desktop View) Mode (769px - 1080px) */
+@media (max-width: 1080px) and (min-width: 769px) {
+  .product-windows-grid {
+    gap: 12px;
+    height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
   }
   .pwindow {
-    padding: 6px 8px 8px;
+    min-height: 0 !important;
+    padding: 8px 10px 10px;
+  }
+  .pwindow-canvas-wrap {
+    min-height: 0 !important;
   }
   .pwindow-title {
-    font-size: 13px;
+    font-size: 13.5px;
   }
   .pwindow-desc {
     display: none;
   }
 }
 
+/* Laptops with limited vertical screen height (<= 820px height) */
+@media (max-height: 820px) and (min-width: 769px) {
+  .products-stage-pin {
+    padding: 0 3vw 10px;
+  }
+  .stage-editorial-header {
+    padding: 10px 0 6px;
+  }
+  .stage-headline {
+    font-size: clamp(19px, 2.2vw, 26px);
+  }
+  .stage-subheadline {
+    font-size: 11px;
+  }
+  .product-windows-grid {
+    gap: 10px;
+    height: calc(100vh - 165px);
+    max-height: calc(100vh - 165px);
+  }
+  .pwindow {
+    min-height: 0 !important;
+    padding: 6px 8px 8px;
+  }
+  .pwindow-canvas-wrap {
+    min-height: 0 !important;
+  }
+  .pwindow-desc {
+    display: none;
+  }
+  .final-combined-box {
+    height: calc(100vh - 165px);
+    max-height: calc(100vh - 165px);
+  }
+}
+
+/* Mobile Devices & iPhone (Portrait, <= 768px) */
 @media (max-width: 768px) {
   .products-stage-section {
     height: 480vh;
   }
   .stage-editorial-header {
-    padding: 12px 4vw 6px;
+    padding: 10px 3vw 4px;
   }
   .stage-sync-badge { display: none; }
   .stage-subheadline { display: none; }
+  .stage-headline {
+    font-size: clamp(18px, 4.8vw, 24px);
+    letter-spacing: -0.02em;
+  }
+  .stage-section-tag, .stage-phase-tag {
+    font-size: 8.5px;
+  }
+  .stage-main-viewport {
+    padding: 0 2vw;
+  }
   .product-windows-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 8px;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 145px);
+    max-height: calc(100vh - 145px);
+  }
+  .pwindow {
+    min-height: 0 !important;
+    padding: 6px 6px 6px;
+    gap: 3px;
   }
   .pwindow-0, .pwindow-1, .pwindow-2, .pwindow-3, .pwindow-4, .pwindow-5 {
     grid-column: span 1;
   }
-  .pwindow-desc { display: none; }
-  .cnc-lockup-content {
-    padding: 0;
+  .pwindow-canvas-wrap {
+    min-height: 0 !important;
+    flex: 1;
   }
-  .cnc-brand-heading {
-    font-size: 24px;
+  .pwindow-desc { display: none !important; }
+  .pwindow-title {
+    font-size: clamp(11px, 3.2vw, 13px);
   }
-  .cnc-pitch-text { display: none; }
-  .timeline-track-bar { max-width: 140px; }
+  .pwindow-cat {
+    font-size: 8px;
+  }
+  .pwindow-metric {
+    font-size: 7.5px;
+  }
+  .final-combined-box {
+    height: calc(100vh - 145px);
+    max-height: calc(100vh - 145px);
+    padding: 8px 8px;
+  }
+  .stage-bottom-timeline {
+    padding: 4px 0 0;
+  }
+  .timeline-track-bar { max-width: 130px; }
+  .timeline-phase-label { display: none; }
+}
+
+/* Compact Mobile Phones & iPhone SE (<= 380px) */
+@media (max-width: 380px) {
+  .product-windows-grid {
+    gap: 5px;
+    height: calc(100vh - 130px);
+    max-height: calc(100vh - 130px);
+  }
+  .pwindow {
+    padding: 4px 5px;
+  }
+  .pwindow-title {
+    font-size: 10.5px;
+  }
+  .pwindow-cat {
+    display: none;
+  }
 }
 
 /* ==========================================================================

@@ -168,6 +168,11 @@
     grid-template-columns: 1fr;
     gap: 12px;
   }
+  .form-input,
+  .form-textarea,
+  .form-select {
+    font-size: 16px !important; /* Critical: prevents iOS Safari automatic page-zoom on input focus */
+  }
   .enquiry-form-wrapper {
     padding: 20px 16px;
   }
@@ -178,5 +183,6 @@
   .form-actions-row .button-primary,
   .form-actions-row .wa-direct-btn {
     justify-content: center;
+    min-height: 48px;
   }
 }
