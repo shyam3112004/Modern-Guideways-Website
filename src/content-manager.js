@@ -611,6 +611,13 @@ export function renderSiteContent(data) {
       const msg = encodeURIComponent(data.contact.whatsappMessage || 'Hello Modern Guideways');
       waBtn.href = `https://wa.me/${data.contact.whatsapp}?text=${msg}`;
     }
+    const emailBtn = document.querySelector('.contact-actions a.text-link');
+    if (emailBtn) {
+      const email = data.contact.email || 'modernguideways@gmail.com';
+      emailBtn.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`;
+      emailBtn.target = '_blank';
+      emailBtn.rel = 'noopener noreferrer';
+    }
   }
 
   // 5. Render Clientele Showcase
