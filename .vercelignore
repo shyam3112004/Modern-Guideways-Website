@@ -21,3 +21,9 @@ public/analysis/**
 .git
 .git/**
 
+
+Product
+Product/**
+public/product_animations
+public/product_animations/**
+public/Final.mp4
