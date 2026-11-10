@@ -138,9 +138,16 @@ export class ProductsStageController {
   setupCanvases() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     if (this.finalCanvas) {
-      const rect = this.finalCanvas.getBoundingClientRect();
-      const w = Math.max(320, Math.floor(rect.width * dpr));
-      const h = Math.max(200, Math.floor(rect.height * dpr));
+      let rect = this.finalCanvas.getBoundingClientRect();
+      let rw = rect.width;
+      let rh = rect.height;
+      if ((!rw || !rh) && this.finalCanvas.parentElement) {
+        const parentRect = this.finalCanvas.parentElement.getBoundingClientRect();
+        rw = parentRect.width;
+        rh = parentRect.height;
+      }
+      const w = Math.max(320, Math.floor((rw || 1080) * dpr));
+      const h = Math.max(200, Math.floor((rh || 608) * dpr));
       if (this.finalCanvas.width !== w || this.finalCanvas.height !== h) {
         this.finalCanvas.width = w;
         this.finalCanvas.height = h;
@@ -262,7 +269,9 @@ export class ProductsStageController {
   }
 
   updateProgress(progress) {
-    if (Math.abs(this.currentProgress - progress) < 0.0005) return;
+    const crossedThreshold = (this.currentProgress < 0.45 && progress >= 0.45) ||
+                             (this.currentProgress >= 0.45 && progress < 0.45);
+    if (!crossedThreshold && Math.abs(this.currentProgress - progress) < 0.0005) return;
     this.currentProgress = progress;
 
     if (!this.isRendering) {
@@ -282,138 +291,129 @@ export class ProductsStageController {
     if (this.timelinePct) this.timelinePct.textContent = `${pctInt}%`;
     if (this.timelineFill) this.timelineFill.style.width = `${p * 100}%`;
 
-    // Phase Logic:
-    // Phase 1 (0.00 - 0.20): Six Engineered Systems
-    // Phase 2 (0.20 - 0.45): Kinematic Datum Alignment
-    // Phase 3 (0.45 - 0.70): Mechanical Convergence
-    // Phase 4 (0.70 - 0.88): Exploded CNC Assembly
-    // Phase 5 (0.88 - 1.00): Fully Integrated CNC Machining Center
+    const TRANSITION_THRESHOLD = 0.45;
+
     let phaseText = 'PHASE 01 / SIX ENGINEERED SYSTEMS';
     let phaseNarrative = 'PRECISION MACHINE PROTECTION — SIX SPECIALIZED SYSTEMS';
 
-    if (p < 0.20) {
-      phaseText = 'PHASE 01 / SIX ENGINEERED SYSTEMS';
-      phaseNarrative = 'PRECISION MACHINE PROTECTION — SIX SPECIALIZED SYSTEMS';
-      const introNorm = Math.min(1, p / 0.20);
-      
+    // =========================================================================
+    // SCROLL TIMELINE:
+    // 1. Product showcase: all six products visible (0.00 <= p < 0.20)
+    // 2. Product animation: all six animations run simultaneously (0.20 <= p < 0.45)
+    // 3. Transition threshold: six product windows disappear immediately (p = 0.45)
+    // 4. Final assembly: CNC machine assembly animation takes over (0.45 <= p < 0.88)
+    // 5. Final screen: one complete CNC machine, with no product windows remaining (0.88 <= p <= 1.00)
+    // =========================================================================
+
+    if (p < TRANSITION_THRESHOLD) {
+      // -----------------------------------------------------------------------
+      // BEFORE FINAL MACHINE SEQUENCE:
+      // - Display all six product windows normally.
+      // - Keep individual animations synchronized with scrolling.
+      // - Product windows are 100% visible, opaque, and interactive.
+      // - Final CNC machine stage is completely hidden.
+      // -----------------------------------------------------------------------
       if (this.grid) {
-        this.grid.style.visibility = 'visible';
-        this.grid.style.opacity = `${0.4 + 0.6 * introNorm}`;
-        this.grid.style.transform = `scale(${0.98 + 0.02 * introNorm})`;
-        this.grid.style.pointerEvents = 'auto';
-      }
-      this.resetProductCardTransforms();
-
-      if (this.guidelinesLayer) this.guidelinesLayer.style.opacity = '0';
-      if (this.finalCncStage) {
-        this.finalCncStage.style.opacity = '0';
-        this.finalCncStage.style.transform = 'scale(0.92)';
-        this.finalCncStage.classList.remove('active');
-      }
-      if (this.cncLockup) this.cncLockup.classList.remove('visible');
-
-      this.renderFinalCncAtFrame(1);
-
-    } else if (p < 0.45) {
-      phaseText = 'PHASE 02 / KINEMATIC DATUM ALIGNMENT';
-      phaseNarrative = 'SIX SYSTEMS ALIGNED TO CENTRAL MACHINE DATUM';
-      const p2Norm = (p - 0.20) / 0.25;
-
-      if (this.grid) {
+        this.grid.classList.remove('is-hidden');
         this.grid.style.visibility = 'visible';
         this.grid.style.opacity = '1';
-        this.grid.style.transform = 'none';
         this.grid.style.pointerEvents = 'auto';
       }
-      this.resetProductCardTransforms();
+      this.productElements.forEach(el => {
+        el.style.visibility = 'visible';
+        el.style.opacity = '1';
+        el.style.pointerEvents = 'auto';
+      });
 
-      if (this.guidelinesLayer) this.guidelinesLayer.style.opacity = `${p2Norm * 0.35}`;
       if (this.finalCncStage) {
+        this.finalCncStage.classList.remove('active');
+        this.finalCncStage.style.visibility = 'hidden';
         this.finalCncStage.style.opacity = '0';
-        this.finalCncStage.style.transform = 'scale(0.92)';
-        this.finalCncStage.classList.remove('active');
+        this.finalCncStage.style.pointerEvents = 'none';
       }
-      if (this.cncLockup) this.cncLockup.classList.remove('visible');
-
-      this.renderFinalCncAtFrame(1);
-
-    } else if (p < 0.70) {
-      phaseText = 'PHASE 03 / MECHANICAL CONVERGENCE';
-      phaseNarrative = 'WAY DEFENSE & ENCLOSURE CONVERGING TOWARD CORE DATUM';
-      const p3Norm = (p - 0.45) / 0.25;
-
-      if (this.grid) {
-        this.grid.style.visibility = 'visible';
-        this.grid.style.opacity = `${1 - p3Norm * 0.3}`;
-        this.grid.style.pointerEvents = 'none';
+      if (this.cncLockup) {
+        this.cncLockup.classList.remove('visible');
       }
 
-      this.applyConvergenceTransforms(p3Norm);
+      if (p < 0.20) {
+        // Stage 1: Product showcase — all six products visible
+        phaseText = 'PHASE 01 / SIX ENGINEERED SYSTEMS';
+        phaseNarrative = 'PRECISION MACHINE PROTECTION — SIX SPECIALIZED SYSTEMS';
+        this.resetProductCardTransforms();
 
-      if (this.guidelinesLayer) {
-        this.guidelinesLayer.style.opacity = `${0.35 + p3Norm * 0.55}`;
+        if (this.guidelinesLayer) {
+          this.guidelinesLayer.style.visibility = 'hidden';
+          this.guidelinesLayer.style.opacity = '0';
+        }
+      } else {
+        // Stage 2: Product animation — all six animations run simultaneously
+        phaseText = 'PHASE 02 / SIX SYNCHRONIZED SYSTEMS';
+        phaseNarrative = 'ALL SIX PROTECTION SYSTEMS SYNCHRONIZED WITH SCROLL TIMELINE';
+        const pAnim = (p - 0.20) / (TRANSITION_THRESHOLD - 0.20);
+
+        this.applySynchronizedProductMotion(pAnim);
+
+        if (this.guidelinesLayer) {
+          this.guidelinesLayer.style.visibility = 'visible';
+          this.guidelinesLayer.style.opacity = `${pAnim * 0.45}`;
+        }
       }
-      if (this.finalCncStage) {
-        this.finalCncStage.style.opacity = `${p3Norm * 0.5}`;
-        this.finalCncStage.style.transform = `scale(${0.92 + p3Norm * 0.04})`;
-        this.finalCncStage.classList.remove('active');
-      }
-      if (this.cncLockup) this.cncLockup.classList.remove('visible');
-
-      const cncAssemblyFrame = Math.min(180, Math.max(1, Math.floor(1 + p3Norm * 179)));
-      this.renderFinalCncAtFrame(cncAssemblyFrame);
-
-    } else if (p < 0.88) {
-      phaseText = 'PHASE 04 / EXPLODED CNC ASSEMBLY';
-      phaseNarrative = 'SEATING SUBSYSTEMS INTO INTEGRATED CNC MILLING ENVELOPE';
-      const p4Norm = (p - 0.70) / 0.18;
-
-      if (this.grid) {
-        this.grid.style.visibility = 'visible';
-        this.grid.style.opacity = `${1 - p4Norm}`;
-        this.grid.style.pointerEvents = 'none';
-      }
-
-      this.applyConvergenceTransforms(1.0 + p4Norm * 0.3, 1.0 - p4Norm);
-
-      if (this.guidelinesLayer) {
-        this.guidelinesLayer.style.opacity = `${(1 - p4Norm) * 0.9}`;
-      }
-      if (this.finalCncStage) {
-        this.finalCncStage.style.opacity = `${0.5 + p4Norm * 0.5}`;
-        this.finalCncStage.style.transform = `scale(${0.96 + p4Norm * 0.04})`;
-        this.finalCncStage.classList.add('active');
-      }
-      if (this.cncLockup) this.cncLockup.classList.remove('visible');
-
-      const cncAssemblyFrame = Math.min(450, Math.max(180, Math.floor(180 + p4Norm * 270)));
-      this.renderFinalCncAtFrame(cncAssemblyFrame);
 
     } else {
-      phaseText = 'PHASE 05 / COMPLETE INTEGRATION';
-      phaseNarrative = 'MODERN GUIDEWAYS — FULLY INTEGRATED PRECISION CNC CENTER';
-      const p5Norm = (p - 0.88) / 0.12;
-
+      // -----------------------------------------------------------------------
+      // AT & DURING FINAL CNC MACHINE SEQUENCE (p >= TRANSITION_THRESHOLD):
+      // - Instantly hide all six product windows (visibility: hidden, opacity: 0).
+      // - Remove them from the visible composition immediately (no slow fade).
+      // - Show ONLY the final CNC machine animation (large, sharp, centered, fully visible).
+      // - No product cards, thumbnails or ghost images remain visible.
+      // -----------------------------------------------------------------------
       if (this.grid) {
+        this.grid.classList.add('is-hidden');
         this.grid.style.visibility = 'hidden';
         this.grid.style.opacity = '0';
         this.grid.style.pointerEvents = 'none';
       }
+      this.productElements.forEach(el => {
+        el.style.visibility = 'hidden';
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
+      });
+
       if (this.guidelinesLayer) {
+        this.guidelinesLayer.style.visibility = 'hidden';
         this.guidelinesLayer.style.opacity = '0';
       }
 
       if (this.finalCncStage) {
+        this.finalCncStage.classList.add('active');
+        this.finalCncStage.style.visibility = 'visible';
         this.finalCncStage.style.opacity = '1';
         this.finalCncStage.style.transform = 'scale(1)';
-        this.finalCncStage.classList.add('active');
+        this.finalCncStage.style.pointerEvents = 'auto';
       }
 
-      const cncAssemblyFrame = Math.min(500, Math.max(450, Math.floor(450 + p5Norm * 50)));
-      this.renderFinalCncAtFrame(cncAssemblyFrame);
+      if (p < 0.88) {
+        // Stage 4: Final assembly — CNC machine assembly animation takes over
+        phaseText = 'PHASE 03 / CNC MACHINE ASSEMBLY';
+        phaseNarrative = 'CINEMATIC 500-FRAME CNC MACHINING CENTER CONVERGENCE';
+        if (this.cncLockup) this.cncLockup.classList.remove('visible');
 
-      if (this.cncLockup) {
-        this.cncLockup.classList.add('visible');
+        const pAssembly = (p - TRANSITION_THRESHOLD) / (0.88 - TRANSITION_THRESHOLD);
+        const frameIndex = Math.min(450, Math.max(1, Math.floor(1 + pAssembly * 449)));
+        this.renderFinalCncAtFrame(frameIndex);
+
+      } else {
+        // Stage 5: Final screen — one complete CNC machine, with no product windows remaining
+        phaseText = 'PHASE 04 / COMPLETE INTEGRATION';
+        phaseNarrative = 'MODERN GUIDEWAYS — FULLY INTEGRATED PRECISION CNC CENTER';
+
+        const pFinal = (p - 0.88) / 0.12;
+        const frameIndex = Math.min(500, Math.max(450, Math.floor(450 + pFinal * 50)));
+        this.renderFinalCncAtFrame(frameIndex);
+
+        if (this.cncLockup) {
+          this.cncLockup.classList.add('visible');
+        }
       }
     }
 
@@ -422,7 +422,11 @@ export class ProductsStageController {
 
     const finalBadge = document.getElementById('final-box-badge');
     if (finalBadge) {
-      const frameNum = (p < 0.45) ? 1 : (p < 0.70 ? Math.min(180, Math.max(1, Math.floor(1 + ((p - 0.45) / 0.25) * 179))) : (p < 0.88 ? Math.min(450, Math.max(180, Math.floor(180 + ((p - 0.70) / 0.18) * 270))) : Math.min(500, Math.max(450, Math.floor(450 + ((p - 0.88) / 0.12) * 50)))));
+      const frameNum = (p < TRANSITION_THRESHOLD)
+        ? 1
+        : (p < 0.88
+          ? Math.min(450, Math.max(1, Math.floor(1 + ((p - TRANSITION_THRESHOLD) / (0.88 - TRANSITION_THRESHOLD)) * 449)))
+          : Math.min(500, Math.max(450, Math.floor(450 + ((p - 0.88) / 0.12) * 50))));
       finalBadge.textContent = `07 / MASTER DATUM · CNC ASSEMBLY (${String(frameNum).padStart(3, '0')}/500)`;
     }
   }
@@ -493,26 +497,26 @@ export class ProductsStageController {
     ctx.drawImage(img, 0, 0, iw, ih, dx, dy, dw, dh);
   }
 
-  applyConvergenceTransforms(t, opacity = 1.0) {
+  applySynchronizedProductMotion(t) {
     this.productElements.forEach((el, idx) => {
       const prod = PRODUCTS_CONFIG[idx];
-      if (!prod || !prod.convergence) return;
+      if (!prod) return;
 
-      const tx = prod.convergence.x * t;
-      const ty = prod.convergence.y * t;
-      const scale = 1.0 - (1.0 - prod.convergence.scale) * t;
+      // Synchronized subtle kinematic displacement and datum focus
+      const tx = prod.convergence ? prod.convergence.x * 0.06 * t : 0;
+      const ty = prod.convergence ? prod.convergence.y * 0.06 * t : 0;
+      const scale = 1.0 + 0.012 * Math.sin(t * Math.PI);
 
-      el.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${scale})`;
-      el.style.opacity = `${opacity}`;
+      el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
+      el.style.opacity = '1';
+      el.style.visibility = 'visible';
 
       const header = el.querySelector('.pwindow-header-bar');
       const info = el.querySelector('.pwindow-info');
       const title = el.querySelector('.pwindow-title');
-      const fadeText = Math.max(0, 1.0 - t * 1.5);
-
-      if (header) header.style.opacity = `${fadeText}`;
-      if (info) info.style.opacity = `${fadeText}`;
-      if (title) title.style.opacity = `${fadeText}`;
+      if (header) header.style.opacity = '1';
+      if (info) info.style.opacity = '1';
+      if (title) title.style.opacity = '1';
     });
   }
 
@@ -520,6 +524,7 @@ export class ProductsStageController {
     this.productElements.forEach(el => {
       el.style.transform = 'none';
       el.style.opacity = '1';
+      el.style.visibility = 'visible';
       const header = el.querySelector('.pwindow-header-bar');
       const info = el.querySelector('.pwindow-info');
       const title = el.querySelector('.pwindow-title');
