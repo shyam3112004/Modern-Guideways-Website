@@ -1,2 +1,10 @@
+# Modern Guideways — Robots Directive
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin.html
+Disallow: /api/
+Disallow: /data/
+
+Sitemap: https://modernguideways.com/sitemap.xml

@@ -8,8 +8,14 @@ const out = resolve('dist');
 await rm(out, { recursive: true, force: true });
 await mkdir(out, { recursive: true });
 
-// Copy index.html and src assets
+// Copy index.html, privacy.html, terms.html and src assets
 await cp(resolve(root, 'index.html'), resolve(out, 'index.html'));
+if (existsSync(resolve(root, 'privacy.html'))) {
+  await cp(resolve(root, 'privacy.html'), resolve(out, 'privacy.html'));
+}
+if (existsSync(resolve(root, 'terms.html'))) {
+  await cp(resolve(root, 'terms.html'), resolve(out, 'terms.html'));
+}
 await cp(resolve(root, 'src'), resolve(out, 'src'), { recursive: true });
 
 // Copy backend API serverless functions
