@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { getSupabaseContent } from './_supabase.js';
 
 const tmpContentFile = resolve(join(tmpdir(), 'mg_content.json'));
 
@@ -11,6 +12,18 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
+  }
+
+  // 1. Try Supabase Persistent Database
+  try {
+    const supabaseContent = await getSupabaseContent();
+    if (supabaseContent) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      return res.status(200).json(supabaseContent);
+    }
+  } catch (err) {
+    console.error('Supabase content read error:', err.message);
   }
 
   // Check /tmp first for runtime modifications

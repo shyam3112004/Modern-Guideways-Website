@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { getSupabaseEnquiries } from './_supabase.js';
 
 const tmpEnquiriesFile = resolve(join(tmpdir(), 'mg_enquiries.json'));
 
@@ -15,6 +16,17 @@ export default async function handler(req, res) {
 
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // 1. Try Supabase Persistent Database
+  try {
+    const dbList = await getSupabaseEnquiries();
+    if (Array.isArray(dbList) && dbList.length > 0) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      return res.status(200).json({ enquiries: dbList, source: 'supabase' });
+    }
+  } catch (err) {
+    console.error('Supabase enquiries read error:', err.message);
   }
 
   let list = [];

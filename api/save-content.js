@@ -1,6 +1,7 @@
 import { writeFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { saveSupabaseContent } from './_supabase.js';
 
 const tmpContentFile = resolve(join(tmpdir(), 'mg_content.json'));
 
@@ -29,13 +30,21 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid content payload' });
     }
 
+    let savedToSupabase = false;
+    try {
+      savedToSupabase = await saveSupabaseContent(body);
+    } catch (err) {
+      console.error('Supabase content save failed:', err.message);
+    }
+
     try {
       writeFileSync(tmpContentFile, JSON.stringify(body, null, 2), 'utf-8');
     } catch (_) {}
 
     return res.status(200).json({
       success: true,
-      message: 'Content updated successfully'
+      savedToDatabase: savedToSupabase,
+      message: savedToSupabase ? 'Content saved permanently to Supabase' : 'Content updated successfully'
     });
   } catch (err) {
     return res.status(500).json({ error: err.message || 'Internal server error' });

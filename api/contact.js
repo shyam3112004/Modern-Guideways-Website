@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { insertSupabaseEnquiry } from './_supabase.js';
 
 const tmpEnquiriesFile = resolve(join(tmpdir(), 'mg_enquiries.json'));
 
@@ -151,6 +152,15 @@ export default async function handler(req, res) {
     enquiry.status = enquiry.status || 'NEW';
 
     list.unshift(enquiry);
+
+    // Persist to Supabase Database
+    let savedToSupabase = false;
+    try {
+      savedToSupabase = await insertSupabaseEnquiry(enquiry);
+    } catch (e) {
+      console.error('Supabase enquiry insert failed:', e.message);
+    }
+
     try {
       writeFileSync(tmpEnquiriesFile, JSON.stringify(list, null, 2), 'utf-8');
     } catch (_) {}
@@ -170,6 +180,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
       id: enquiry.id,
+      savedToDatabase: savedToSupabase,
       message: 'Enquiry received and logged successfully.',
       emailNotification: emailStatus?.success ? 'delivered' : (emailStatus?.skipped ? 'skipped_no_api_key' : 'failed'),
       webhookAlert: webhookStatus?.success ? 'delivered' : 'skipped'
