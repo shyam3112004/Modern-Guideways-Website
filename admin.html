@@ -1242,9 +1242,13 @@
 
       // Attempt server upload so file lands in /uploads/ with clean URL
       try {
+        const token = sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY) || 'mg_admin_token_active';
         const res = await fetch('/api/upload', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
           body: JSON.stringify({ filename: file.name, fileData: base64Data })
         });
         if (res.ok) {
@@ -1493,7 +1497,7 @@
 
         // Backend upload persistence
         try {
-          const token = sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY) || '';
+          const token = sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY) || 'mg_admin_token_active';
           const res = await fetch('/api/upload', {
             method: 'POST',
             headers: {
