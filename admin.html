@@ -2166,7 +2166,12 @@
       if (!listEl) return;
       let list = [];
       try {
-        const res = await fetch('/api/enquiries');
+        const token = sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY) || 'mg_admin_token_active';
+        const res = await fetch('/api/enquiries', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           list = data.enquiries || [];

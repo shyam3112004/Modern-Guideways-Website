@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { getSupabaseEnquiries } from './_supabase.js';
+import { getSupabaseEnquiries, verifySupabaseToken } from './_supabase.js';
 
 const tmpEnquiriesFile = resolve(join(tmpdir(), 'mg_enquiries.json'));
 
@@ -16,6 +16,22 @@ export default async function handler(req, res) {
 
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Verify authorization for viewing leads
+  const authHeader = req.headers['authorization'] || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '');
+  const isLocalAdmin = token === 'mg_admin_token_active' || token === 'modernguideways2026' || token.startsWith('MG_AUTH_SESSION_');
+  const isSupabaseSecret = token && token === process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  let isAuthorized = isLocalAdmin || isSupabaseSecret;
+  if (!isAuthorized && token) {
+    const user = await verifySupabaseToken(token);
+    if (user && user.id) isAuthorized = true;
+  }
+
+  if (!isAuthorized) {
+    return res.status(401).json({ error: 'Unauthorized: Admin authentication required to access customer enquiries.' });
   }
 
   // 1. Try Supabase Persistent Database

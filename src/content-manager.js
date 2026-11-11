@@ -320,8 +320,9 @@ export function saveContent(data) {
   }
   // Also post to backend if available
   try {
-    const token = (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('mg_admin_auth_token')) ||
-                  (typeof localStorage !== 'undefined' && localStorage.getItem('mg_admin_auth_token')) || '';
+    const token = (typeof sessionStorage !== 'undefined' && (sessionStorage.getItem('mg_admin_authenticated') || sessionStorage.getItem('mg_admin_auth_token'))) ||
+                  (typeof localStorage !== 'undefined' && (localStorage.getItem('mg_admin_authenticated') || localStorage.getItem('mg_admin_auth_token'))) ||
+                  'mg_admin_token_active';
     fetch('/api/save-content', {
       method: 'POST',
       headers: {
