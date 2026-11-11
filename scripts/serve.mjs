@@ -55,7 +55,7 @@ const server = http.createServer((req, res) => {
         }
 
         const ext = extname(filename).toLowerCase();
-        const allowedExts = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
+        const allowedExts = ['.png', '.jpg', '.jpeg', '.webp', '.svg', '.mp4', '.webm', '.mov', '.ogg'];
         if (!allowedExts.includes(ext)) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({ error: `File type ${ext} not allowed. Supported: ${allowedExts.join(', ')}` }));
@@ -69,13 +69,16 @@ const server = http.createServer((req, res) => {
           buffer = Buffer.from(fileData, 'base64');
         }
 
-        if (buffer.length > 5 * 1024 * 1024) {
+        const isVideo = ['.mp4', '.webm', '.mov', '.ogg'].includes(ext);
+        const maxLimit = isVideo ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+        if (buffer.length > maxLimit) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
-          return res.end(JSON.stringify({ error: 'File size exceeds 5MB limit.' }));
+          return res.end(JSON.stringify({ error: `File size exceeds ${isVideo ? '50MB' : '10MB'} limit.` }));
         }
 
         const cleanBase = filename.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '_');
-        const safeName = `logo_${Date.now()}_${cleanBase}${ext}`;
+        const prefix = isVideo ? 'video' : 'media';
+        const safeName = `${prefix}_${Date.now()}_${cleanBase}${ext}`;
 
         const uploadDir = resolve(join(root, 'public', 'uploads'));
         mkdirSync(uploadDir, { recursive: true });

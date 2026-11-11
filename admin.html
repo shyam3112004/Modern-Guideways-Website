@@ -1198,9 +1198,12 @@
       });
     }
 
-    function handleGalleryMediaFile(file, idx) {
+    async function handleGalleryMediaFile(file, idx) {
       if (!file) return;
-      const isVideo = file.type.startsWith('video');
+      const ext = (file.name.match(/\.[^/.]+$/) || [''])[0].toLowerCase();
+      const isVideo = file.type.startsWith('video') || ['.mp4', '.webm', '.mov', '.ogg'].includes(ext);
+      const mediaType = isVideo ? 'video' : 'image';
+
       const previewBox = document.getElementById(`gal-media-preview-${idx}`);
       const urlInput = document.getElementById(`gal-media-url-${idx}`);
       const typeInput = document.getElementById(`gal-media-type-${idx}`);
@@ -1210,30 +1213,54 @@
       const clearBtn = document.getElementById(`clear-gal-media-${idx}`);
       const iconEl = document.getElementById(`gal-media-icon-${idx}`);
 
-      if (isVideo && file.size > 30 * 1024 * 1024) {
-        if (!confirm('This video exceeds 30MB. For optimal website loading speed and browser storage limits, we recommend smaller clips. Continue uploading?')) {
+      if (isVideo && file.size > 50 * 1024 * 1024) {
+        if (!confirm('This video exceeds 50MB. For optimal website loading speed, we recommend smaller clips. Continue uploading?')) {
           return;
         }
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target.result;
-        const mediaType = isVideo ? 'video' : 'image';
-        if (urlInput) urlInput.value = dataUrl;
-        if (typeInput) typeInput.value = mediaType;
-        if (fileNameInput) fileNameInput.value = file.name;
-        if (fileNameEl) fileNameEl.textContent = file.name;
-        if (statusEl) statusEl.textContent = `${mediaType.toUpperCase()} selected (${(file.size / 1024).toFixed(0)} KB) · Click Save Changes to publish`;
-        if (iconEl) iconEl.textContent = isVideo ? '🎥' : '📁';
-        if (previewBox) {
-          previewBox.innerHTML = renderMediaPreviewHtml(dataUrl, mediaType, file.name);
-          previewBox.classList.remove('hidden');
+      if (statusEl) statusEl.textContent = `Processing ${mediaType} from computer...`;
+
+      const base64Data = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = () => reject(new Error('Failed to read file locally.'));
+        reader.readAsDataURL(file);
+      });
+
+      // Immediate preview and local values
+      if (urlInput) urlInput.value = base64Data;
+      if (typeInput) typeInput.value = mediaType;
+      if (fileNameInput) fileNameInput.value = file.name;
+      if (fileNameEl) fileNameEl.textContent = file.name;
+      if (iconEl) iconEl.textContent = isVideo ? '🎥' : '📁';
+      if (previewBox) {
+        previewBox.innerHTML = renderMediaPreviewHtml(base64Data, mediaType, file.name);
+        previewBox.classList.remove('hidden');
+      }
+      if (clearBtn) clearBtn.classList.remove('hidden');
+
+      // Attempt server upload so file lands in /uploads/ with clean URL
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: file.name, fileData: base64Data })
+        });
+        if (res.ok) {
+          const result = await res.json();
+          if (result && result.url) {
+            if (urlInput) urlInput.value = result.url;
+            if (fileNameInput) fileNameInput.value = result.filename || file.name;
+            if (previewBox) previewBox.innerHTML = renderMediaPreviewHtml(result.url, mediaType, file.name);
+          }
         }
-        if (clearBtn) clearBtn.classList.remove('hidden');
-        collectFormData();
-      };
-      reader.readAsDataURL(file);
+      } catch (err) {
+        console.warn('Backend upload skipped, keeping local data representation:', err);
+      }
+
+      if (statusEl) statusEl.textContent = `${mediaType.toUpperCase()} chosen (${(file.size / 1024).toFixed(0)} KB) · Click Save Changes to publish`;
+      collectFormData();
     }
 
     // Render Gallery Form
