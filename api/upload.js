@@ -1,5 +1,5 @@
 import { extname } from 'node:path';
-import { uploadToSupabaseStorage, getSupabaseConfig } from './_supabase.js';
+import { uploadToSupabaseStorage, getSupabaseConfig, verifySupabaseToken } from './_supabase.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,6 +12,22 @@ export default async function handler(req, res) {
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Verify authorization
+  const authHeader = req.headers['authorization'] || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '');
+  const isLocalAdmin = token === 'mg_admin_token_active' || token === 'modernguideways2026';
+  const isSupabaseSecret = token && token === process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  let isAuthorized = isLocalAdmin || isSupabaseSecret;
+  if (!isAuthorized && token) {
+    const user = await verifySupabaseToken(token);
+    if (user && user.id) isAuthorized = true;
+  }
+
+  if (!isAuthorized) {
+    return res.status(401).json({ error: 'Unauthorized: Admin authentication required' });
   }
 
   try {

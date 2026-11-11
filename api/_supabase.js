@@ -16,6 +16,29 @@ export function getSupabaseConfig() {
 }
 
 /**
+ * Verify user JWT token with Supabase Auth
+ */
+export async function verifySupabaseToken(token) {
+  const { url, key, isConfigured } = getSupabaseConfig();
+  if (!isConfigured || !token) return null;
+
+  try {
+    const res = await fetch(`${url}/auth/v1/user`, {
+      headers: {
+        'apikey': key,
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.error('[Supabase Auth] Verification failed:', err.message);
+  }
+  return null;
+}
+
+/**
  * Execute query against Supabase PostgREST API
  */
 export async function supabaseRequest(endpoint, { method = 'GET', body = null, headers = {} } = {}) {

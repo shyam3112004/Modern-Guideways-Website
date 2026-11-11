@@ -1,7 +1,7 @@
 import { writeFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { saveSupabaseContent } from './_supabase.js';
+import { saveSupabaseContent, verifySupabaseToken } from './_supabase.js';
 
 const tmpContentFile = resolve(join(tmpdir(), 'mg_content.json'));
 
@@ -28,6 +28,22 @@ export default async function handler(req, res) {
 
     if (!body || typeof body !== 'object') {
       return res.status(400).json({ error: 'Invalid content payload' });
+    }
+
+    // Verify authorization: allow Supabase JWT, secret key, or local admin token
+    const authHeader = req.headers['authorization'] || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '');
+    const isLocalAdmin = token === 'mg_admin_token_active' || token === 'modernguideways2026';
+    const isSupabaseSecret = token && token === process.env.SUPABASE_SERVICE_ROLE_KEY;
+    
+    let isAuthorized = isLocalAdmin || isSupabaseSecret;
+    if (!isAuthorized && token) {
+      const user = await verifySupabaseToken(token);
+      if (user && user.id) isAuthorized = true;
+    }
+
+    if (!isAuthorized) {
+      return res.status(401).json({ error: 'Unauthorized: Admin authentication required' });
     }
 
     let savedToSupabase = false;
